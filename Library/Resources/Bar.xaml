@@ -1,0 +1,65 @@
+﻿<UserControl
+    x:Class="Library.Resources.Bar"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:local="clr-namespace:Library.Resources"
+    mc:Ignorable="d"
+    MinWidth="20"
+    Width="auto"
+    Loaded="UserControl_Loaded">
+
+    <!-- This is the root Grid of the Bar user control. It handles the SizeChanged event. -->
+    <Grid
+        SizeChanged="Grid_SizeChanged">
+
+        <!-- This Grid displays the backgorund bar. -->
+        <Grid
+            Background="{Binding BackgroundColor}"
+            Opacity="0.3"/>
+
+        <!-- This Grid displays the actual bar. -->
+        <Grid
+            x:Name="bar"
+            Background="{Binding Color}"
+            VerticalAlignment="Bottom"
+            Height="{Binding BarHeight}">
+
+            <!-- This TextBlock displays the value of the bar. It's centered and rotated 270 degrees. -->
+            <TextBlock
+                VerticalAlignment="Center"
+                Margin="3"
+                HorizontalAlignment="Center"
+                Text="{Binding Value}"
+                FontSize="20">
+    
+                <!-- This effect gives the text a white shadow for better visibility. -->
+                <TextBlock.Effect>
+
+                    <DropShadowEffect
+                        BlurRadius="1"
+                        ShadowDepth="0"
+                        Color="White"/>
+
+                </TextBlock.Effect>
+
+                <!-- This rotation transform is used to rotate the text 270 degrees. -->
+                <TextBlock.LayoutTransform>
+
+                    <TransformGroup>
+
+                        <RotateTransform
+                            Angle="270"/>
+
+                    </TransformGroup>
+
+                </TextBlock.LayoutTransform>
+
+            </TextBlock>
+
+        </Grid>
+
+    </Grid>
+
+</UserControl>

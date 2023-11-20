@@ -1,0 +1,262 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Button (BaseButtonStyle)-->
+    <Style
+        x:Key="BaseButtonStyle"
+        TargetType="Button">
+        
+        <Setter
+            Property="Template">
+            
+            <Setter.Value>
+                
+                <ControlTemplate
+                    TargetType="{x:Type Button}">
+                    
+                    <ContentControl>
+                        
+                        <Grid>
+                            
+                            <Border
+                                Name="PressedBorder"
+                                BorderBrush="#FF656565"
+                                Background="#FF9F9F9F"
+                                BorderThickness="1">
+                                
+                                <Grid>
+                                    
+                                    <Rectangle
+                                        Fill="LightGray"
+                                        Margin="1,1,1,1"/>
+                                    
+                                </Grid>
+                                
+                            </Border>
+                            
+                            <Border
+                                Name="NormalBorder"
+                                BorderBrush="#FF656565"
+                                BorderThickness="1">
+                                
+                                <Grid>
+                                    
+                                    <Rectangle
+                                        x:Name="BG1"
+                                        Fill="White"
+                                        Margin="-1,-1,0,0"/>
+                                    
+                                    <Rectangle
+                                        x:Name="BG2"
+                                        Fill="#FF9F9F9F"
+                                        Margin="0,0,0,0"/>
+                                    
+                                    <Rectangle
+                                        x:Name="BG3"
+                                        Fill="#FFE2E2E2"
+                                        Margin="0,0,1,1"/>
+                                    
+                                    <Rectangle
+                                        x:Name="BG4"
+                                        Fill="LightGray"
+                                        Margin="1,1,1,1"/>
+                                    
+                                </Grid>
+                                
+                            </Border>
+                            
+                            <ContentPresenter
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center" />
+                            
+                        </Grid>
+                        
+                    </ContentControl>
+
+                    <ControlTemplate.Triggers>
+                        
+                        <Trigger
+                            Property="Button.IsPressed"
+                            Value="True" >
+                            
+                            <Setter
+                                TargetName="NormalBorder"
+                                Property="BorderBrush"
+                                Value="Transparent" />
+                            
+                            <Setter
+                                TargetName="BG1"
+                                Property="Fill"
+                                Value="Transparent" />
+                            
+                            <Setter
+                                TargetName="BG2"
+                                Property="Fill"
+                                Value="Transparent" />
+                            
+                            <Setter
+                                TargetName="BG3"
+                                Property="Fill"
+                                Value="Transparent" />
+                            
+                            <Setter
+                                TargetName="BG4"
+                                Property="Fill"
+                                Value="Transparent" />
+                            
+                        </Trigger>
+                        
+                        <Trigger
+                            Property="Button.IsEnabled"
+                            Value="False" >
+                            
+                            <Setter
+                                TargetName="BG4"
+                                Property="Fill"
+                                Value="#FFE2E2E2" />
+                            
+                            <Setter
+                                Property="Foreground"
+                                Value="#FF808080"/>
+                            
+                        </Trigger>
+                        
+                    </ControlTemplate.Triggers>
+                    
+                </ControlTemplate>
+                
+            </Setter.Value>
+            
+        </Setter>
+        
+        <Style.Resources>
+            
+            <Style
+                TargetType="{x:Type Border}">
+                
+                <Setter
+                    Property="CornerRadius"
+                    Value="3" />
+                
+            </Style>
+            
+        </Style.Resources>
+        
+    </Style>
+
+    <!-- TextBox -->
+    <Style
+        TargetType="TextBox">
+        
+        <Style.Resources>
+            
+            <Style
+                TargetType="{x:Type Border}">
+                
+                <Setter
+                    Property="CornerRadius"
+                    Value="3" />
+                
+            </Style>
+            
+        </Style.Resources>
+        
+    </Style>
+
+    <!-- ListBox -->
+    <Style
+        TargetType="ListBox">
+        
+        <Style.Resources>
+            
+            <Style
+                TargetType="{x:Type Border}">
+                
+                <Setter
+                    Property="CornerRadius"
+                    Value="3" />
+                
+            </Style>
+            
+        </Style.Resources>
+        
+    </Style>
+
+    <!-- ScrollBar -->
+    <Style 
+        TargetType="ScrollBar">
+
+        <Style.Resources>
+            
+            <Style
+                TargetType="{x:Type Border}">
+
+                <Setter
+                    Property="CornerRadius"
+                    Value="3"/>
+
+            </Style>
+            
+        </Style.Resources>
+        
+    </Style>
+
+    <!-- Rectangle -->
+    <Style
+        TargetType="Rectangle">
+        
+        <Style.Resources>
+            
+            <Style
+                TargetType="{x:Type Border}">
+                
+                <Setter
+                    Property="CornerRadius"
+                    Value="3" />
+                
+            </Style>
+            
+        </Style.Resources>
+        
+    </Style>
+
+    <!-- ComboBox -->
+    <Style
+        TargetType="ComboBox">
+
+        <Style.Resources>
+            
+            <Style
+                TargetType="{x:Type Border}">
+
+                <Setter
+                    Property="CornerRadius"
+                    Value="3"/>
+
+            </Style>
+            
+        </Style.Resources>
+        
+    </Style>
+
+    <!-- ProgressBar -->
+    <Style
+        TargetType="ProgressBar">
+
+        <Style.Resources>
+            
+            <Style
+                TargetType="{x:Type Border}">
+
+                <Setter
+                    Property="CornerRadius"
+                    Value="3"/>
+
+            </Style>
+            
+        </Style.Resources>
+        
+    </Style>
+    
+</ResourceDictionary>

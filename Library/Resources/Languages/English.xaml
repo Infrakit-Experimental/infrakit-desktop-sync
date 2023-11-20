@@ -1,0 +1,142 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!--#region general-->
+
+    <sys:String x:Key="ok">OK</sys:String>
+    <sys:String x:Key="cancel">Cancel</sys:String>
+
+    <!--#endregion general-->
+
+    <!--#region windows-->
+
+    <!--#region log in window-->
+
+    <sys:String x:Key="logIn.username">Username:</sys:String>
+    <sys:String x:Key="logIn.password">Password:</sys:String>
+    <sys:String x:Key="logIn.rememberMe">Remember the username</sys:String>
+    <sys:String x:Key="logIn.logIn">Log in</sys:String>
+    
+    <!--#endregion log in window-->
+
+    <!--#region settings window-->
+
+    <sys:String x:Key="settings.title">Settings</sys:String>
+    <sys:String x:Key="settings.language">Language:</sys:String>
+
+    <!--#endregion settings window-->
+
+    <!--#endregion windows-->
+
+    <!--#region API-->
+
+    <!--#region API Key-->
+
+    <sys:String x:Key="api.APIExpired.caption">API Key</sys:String>
+    <sys:String x:Key="api.APIExpired.message">API Key expired</sys:String>
+
+    <!--#endregion API Key-->
+
+    <!--#region titles-->
+    
+    <!--#region authentication-->
+
+    <sys:String x:Key="api.authentication.postApiLogIn">Error getting the ApiKey</sys:String>
+
+    <!--#endregion authentication-->
+
+    <!--#region project-->
+
+    <sys:String x:Key="api.project.post">Error creating the project</sys:String>
+    <sys:String x:Key="api.project.get">Error getting the projects</sys:String>
+    <sys:String x:Key="api.project.getMetadata">Error getting the project metadata</sys:String>
+    <sys:String x:Key="api.project.getFolders">Error getting the folders</sys:String>
+
+    <!--#endregion project-->
+
+    <!--#region folder-->
+
+    <sys:String x:Key="api.folder.get">Error retrieving the folders and/or documents</sys:String>
+    <sys:String x:Key="api.folder.getMetadata">Error retrieving the metadata of the folder</sys:String>
+    <sys:String x:Key="api.folder.post">Error creating folders</sys:String>
+    <sys:String x:Key="api.folder.getDocuments">Error retrieving the documents</sys:String>
+    <sys:String x:Key="api.folder.getFolders">Error retrieving the folders</sys:String>
+    <sys:String x:Key="api.folder.getImages">Error retrieving the images</sys:String>
+    <sys:String x:Key="api.folder.getProperties">Error retrieving the properties of the folder</sys:String>
+
+    <!--#endregion folder-->
+
+    <!--#region equipment-->
+
+    <sys:String x:Key="api.equipment.get">Error retrieving the equipment</sys:String>
+
+    <!--#endregion equipment-->
+
+    <!--#region document-->
+
+    <sys:String x:Key="api.document.getUploudURL">Error retrieving the file upload URL</sys:String>
+    <sys:String x:Key="api.document.upload">Error uploading the file</sys:String>
+    <sys:String x:Key="api.document.getMetadata">Error retrieving the document metadata</sys:String>
+    <sys:String x:Key="api.document.delete">Error deleting the document</sys:String>
+    <sys:String x:Key="api.document.getDownloadURL">Error retrieving the document download url</sys:String>
+    <sys:String x:Key="api.document.download">Error downloading the file</sys:String>
+
+    <!--#endregion document-->
+
+    <!--#region logpoint-->
+
+    <sys:String x:Key="api.logpoint.get">Error retrieving the logpoints</sys:String>
+
+    <!--#endregion logpoint-->
+
+    <!--#region property-->
+
+    <sys:String x:Key="api.property.getProject">Error retrieving the properties of the project</sys:String>
+    <sys:String x:Key="api.property.addProject">Error adding the properties to the project</sys:String>
+
+    <!--#endregion property-->
+
+    <!--#region undocumented endpoints-->
+
+    <sys:String x:Key="api.deleteFileFolder">Error deleting folder</sys:String>
+
+    <!--#endregion undocumented endpoints-->
+
+    <!--#endregion titles-->
+
+    <!--#region messages-->
+
+    <sys:String x:Key="api.default">An unexpected error occurred</sys:String>
+
+    <!--#region status codes-->
+
+    <sys:String x:Key="api.400.1">Given input parameters are lacking or invalid</sys:String>
+    <sys:String x:Key="api.400.2">Request was invalid, or contained malformed parameters</sys:String>
+
+    <sys:String x:Key="api.401">Could not authenticate</sys:String>
+
+    <sys:String x:Key="api.403.1">Access denied to target project for the session user</sys:String>
+    <sys:String x:Key="api.403.2">Authentication failed (invalid credentials)</sys:String>
+    <sys:String x:Key="api.403.3">User was authenticated, but is missing privileges</sys:String>
+    <sys:String x:Key="api.403.4">No permission to create objects</sys:String>
+
+    <sys:String x:Key="api.404.1">Project does not exist</sys:String>
+    <sys:String x:Key="api.404.2">Folder does not exist</sys:String>
+    <sys:String x:Key="api.404.3">Document does not exist</sys:String>
+    <sys:String x:Key="api.404.4">Assignment not found in database</sys:String>
+
+    <sys:String x:Key="api.409">The identical document already exists</sys:String>
+
+    <sys:String x:Key="api.500">Infrakit internal resource failed</sys:String>
+
+    <!--#endregion status codes-->
+
+    <sys:String x:Key="api.timeout">A timeout error has occurred</sys:String>
+
+    <!--#endregion messages-->
+
+    <!--#endregion API-->
+
+</ResourceDictionary>

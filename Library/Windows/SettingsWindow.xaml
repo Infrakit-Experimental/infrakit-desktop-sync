@@ -1,0 +1,167 @@
+﻿<Window
+    x:Class="Library.Windows.SettingsWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:Library.Windows"
+    mc:Ignorable="d"
+    Title="{DynamicResource settings.title}"
+    Height="145"
+    Width="275"
+    MinHeight="145"
+    MinWidth="175"
+    ResizeMode="CanResize"
+    WindowStartupLocation="CenterScreen">
+    
+    <Grid
+        Margin="5">
+
+        <!--#region structure definitions-->
+
+        <Grid.RowDefinitions>
+
+            <RowDefinition
+                Height="*"/>
+
+            <RowDefinition
+                Height="30"/>
+
+        </Grid.RowDefinitions>
+
+        <!--#endregion structure definitions-->
+
+        <!-- This ScrollViewer contains the settings grid, so that users can scroll through it if it is too large to fit in the window. -->
+        <ScrollViewer
+            Grid.Row="0"
+            x:Name="svSettings"
+            Margin="5"
+            HorizontalScrollBarVisibility="Disabled"
+            VerticalScrollBarVisibility="Auto"
+            ScrollChanged="svSettings_ScrollChanged">
+
+            <Grid
+                x:Name="gdSettings">
+
+                <!--#region structure definitions-->
+
+                <Grid.RowDefinitions>
+
+                    <RowDefinition
+                            Height="auto"/>
+
+                    <RowDefinition
+                            Height="*"/>
+
+                </Grid.RowDefinitions>
+
+                <!--#endregion structure definitions-->
+
+                <!--#region language-->
+
+                <Grid
+                    Grid.Row="0">
+
+                    <!--#region structure definitions-->
+
+                    <Grid.RowDefinitions>
+
+                        <RowDefinition
+                            Height="28"/>
+
+                        <RowDefinition
+                            Height="25"/>
+
+                    </Grid.RowDefinitions>
+
+                    <!--#endregion structure definitions-->
+
+                    <!-- This TextBlock displays the current language setting. -->
+                    <TextBlock
+                        Grid.Row="0"
+                        Text="{DynamicResource settings.language}"
+                        Margin="0,5"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"/>
+
+                    <!-- This ComboBox allows users to select the language setting. -->
+                    <ComboBox
+                        Grid.Row="1"
+                        x:Name="cbLanguages"
+                        Margin="0,0,0,5"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        SelectionChanged="cbLanguages_SelectionChanged">
+
+                        <!-- This ComboBoxItem represents the English language setting. -->
+                        <ComboBoxItem
+                            x:Name="en"
+                            Content="English"/>
+
+                        <!-- This ComboBoxItem represents the German language setting. -->
+                        <ComboBoxItem
+                            x:Name="de"
+                            Content="Deutsch"/>
+
+                    </ComboBox>
+
+                </Grid>
+
+                <!--#endregion language-->
+
+            </Grid>
+
+        </ScrollViewer>
+
+        <!--#region controls-->
+
+        <!-- This grid contains the OK and Cancel buttons. -->
+        <Grid
+            Grid.Row="1"
+            Margin="0"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch">
+
+            <!--#region structure definitions-->
+
+            <Grid.ColumnDefinitions>
+
+                <ColumnDefinition
+                    Width="*"/>
+
+                <ColumnDefinition
+                    Width="*"/>
+
+            </Grid.ColumnDefinitions>
+
+            <!--#endregion structure definitions-->
+
+            <!-- This button clicks to save the settings and close the window. -->
+            <Button
+                Grid.Column="0"
+                x:Name="btnOk"
+                Content="{DynamicResource ok}"
+                Style="{StaticResource BaseButtonStyle}"
+                Margin="5"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Click="btnOk_Click"/>
+
+            <!-- This button clicks to close the window without saving the settings. -->
+            <Button
+                Grid.Column="1"
+                x:Name="btnCancel"
+                Content="{DynamicResource cancel}"
+                Style="{StaticResource BaseButtonStyle}"
+                Margin="5"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Click="btnCancel_Click"/>
+
+        </Grid>
+
+        <!--#endregion controls-->
+
+    </Grid>
+
+</Window>
