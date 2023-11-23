@@ -249,9 +249,6 @@ namespace File_Sync_App
                     logRoot = ikData.sync(lData);
                 }
 
-                this.localData.removeDeletedFiles();
-                this.infrakitData.removeDeletedFiles();
-
                 var linkNode = this.getXmlNode();
                 Resources.edit(linkNode.doc, linkNode.node, "link[@name='" + this.name + "']");
 

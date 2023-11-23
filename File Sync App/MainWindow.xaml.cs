@@ -1,6 +1,4 @@
 ﻿using File_Sync_App.InputWindows;
-using File_Sync_App.Nodes;
-using File_Sync_App.Windows;
 using Library;
 using System;
 using System.Collections.Generic;
@@ -9,9 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Automation;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;

@@ -722,28 +722,5 @@ namespace File_Sync_App.Nodes.Folders
         }
 
         #endregion update
-
-        /// <summary>
-        /// Gets an array of the file names that are existing in the folder.
-        /// </summary>
-        /// <returns>An array of file names.</returns>
-        internal override string[]? getUpdatedFileNames()
-        {
-            try
-            {
-                var files = Directory.GetFiles(this.pos, "*", SearchOption.TopDirectoryOnly);
-
-                for (int i = 0; i < files.Length; i++)
-                {
-                    files[i] = Path.GetFileName(files[i]);
-                }
-
-                return files;
-            }
-            catch
-            {
-                return null;
-            }
-        }
     }
 }
