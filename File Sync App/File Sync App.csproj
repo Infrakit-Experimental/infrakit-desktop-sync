@@ -99,7 +99,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\infrakit-library\Library\Library.csproj" />
+	  <ProjectReference Include="..\..\infrakit-cs-library\Library\Library.csproj" />
 	</ItemGroup>
 
 </Project>
