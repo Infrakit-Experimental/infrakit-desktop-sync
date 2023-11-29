@@ -1,7 +1,5 @@
 ﻿using File_Sync_App.Nodes.Files;
-using Library;
 using System.Collections.Generic;
-using System.Linq;
 using System.Xml;
 
 namespace File_Sync_App.Nodes.Folders
@@ -536,6 +534,8 @@ namespace File_Sync_App.Nodes.Folders
                 }
 
                 var ikFolder = (IKFolder)folder;
+                ikFolders.Remove(ikFolder);
+
                 var ikToSync = ikFolder.isToSync();
 
                 if (!lToSync)
@@ -582,7 +582,7 @@ namespace File_Sync_App.Nodes.Folders
 
                 #endregion delete
 
-                Folder.sync(lFolder, ikFolder);
+                logRoot.children.Add(Folder.sync(lFolder, ikFolder));
             }
 
             foreach (var ikFolder in ikFolders)
