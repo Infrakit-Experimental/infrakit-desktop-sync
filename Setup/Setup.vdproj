@@ -50,6 +50,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
             }
         }
         "Release"
@@ -74,6 +82,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
             }
         }
     }
@@ -134,7 +150,7 @@
         {
             "{3C67513D-01DD-4637-8A68-80971EB9504F}:_16A93A77A73B41F89DB69F3F7B8EA9E8"
             {
-            "DefaultLocation" = "8:[ProgramFilesFolder]Infrakit\\FileSyncApp"
+            "DefaultLocation" = "8:[WindowsVolume]\\[Manufacturer]\\[ProductName]"
             "Name" = "8:#1925"
             "AlwaysCreate" = "11:FALSE"
             "Condition" = "8:"
@@ -181,7 +197,7 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:Setup"
+        "ProductName" = "8:Infrakit desktop sync"
         "ProductCode" = "8:{F0AD3C90-7DC9-4477-97BB-4BD65BCB17F1}"
         "PackageCode" = "8:{ACC9D6AB-37E7-44FB-8579-B74596A471A8}"
         "UpgradeCode" = "8:{5ACF97AB-65DF-4043-BBD3-97BB311B8A78}"
@@ -194,7 +210,7 @@
         "Manufacturer" = "8:Infrakit"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:Setup"
+        "Title" = "8:Infrakit desktop sync"
         "Subject" = "8:"
         "ARPCONTACT" = "8:Infrakit"
         "Keywords" = "8:"
@@ -303,31 +319,31 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_5795506FA935482FBAD69DDD9A328390"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_202C3D705CA74A3EA6C2B4292A987D65"
             {
-            "Name" = "8:Shortcut to %sUser's Desktop"
+            "Name" = "8:File Sync App"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_8DB5264D08884F189269D00B8D408F1B"
-            "Folder" = "8:_8DB5264D08884F189269D00B8D408F1B"
-            "WorkingFolder" = "8:_8DB5264D08884F189269D00B8D408F1B"
+            "Target" = "8:_8916FFBA55784CA6845E582C680F98E3"
+            "Folder" = "8:_9DAC65B8FBDA42CE9F6002B04E9828CA"
+            "WorkingFolder" = "8:_16A93A77A73B41F89DB69F3F7B8EA9E8"
             "Icon" = "8:_DF0DF1A4D6C24563B82FFE1A5ADC2F74"
             "Feature" = "8:"
             }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_99C7968445454BB8A74A03D1A3FF05AF"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_D3DD3D9DBC9A41C3AF17A2CE01F02CFE"
             {
-            "Name" = "8:Shortcut to %sUser's Programs Menu"
+            "Name" = "8:File Sync App"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_9DAC65B8FBDA42CE9F6002B04E9828CA"
-            "Folder" = "8:_9DAC65B8FBDA42CE9F6002B04E9828CA"
-            "WorkingFolder" = "8:_9DAC65B8FBDA42CE9F6002B04E9828CA"
+            "Target" = "8:_8916FFBA55784CA6845E582C680F98E3"
+            "Folder" = "8:_8DB5264D08884F189269D00B8D408F1B"
+            "WorkingFolder" = "8:_16A93A77A73B41F89DB69F3F7B8EA9E8"
             "Icon" = "8:_DF0DF1A4D6C24563B82FFE1A5ADC2F74"
             "Feature" = "8:"
             }
@@ -350,7 +366,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_21BAF6B093F542ECBAC51973064B2339"
                     {
                     "Sequence" = "3:200"
-                    "DisplayName" = "8:Installation Folder"
+                    "DisplayName" = "8:Installationsordner"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdFolderDlg.wid"
@@ -385,7 +401,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_4EA68C2469AD4E5EB1E22882A457C472"
                     {
                     "Sequence" = "3:100"
-                    "DisplayName" = "8:Welcome"
+                    "DisplayName" = "8:Willkommen"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdWelcomeDlg.wid"
@@ -433,7 +449,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_707965B3FB314E56810B90531F5D1B32"
                     {
                     "Sequence" = "3:300"
-                    "DisplayName" = "8:Confirm Installation"
+                    "DisplayName" = "8:Installation bestätigen"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdConfirmDlg.wid"
@@ -464,7 +480,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_F7A295A71E6346C78665966B00B80384"
                     {
                     "Sequence" = "3:100"
-                    "DisplayName" = "8:Finished"
+                    "DisplayName" = "8:Fertig"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdAdminFinishedDlg.wid"
@@ -495,7 +511,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_E68B9C8D91B2439EA1E3833D0F8F559B"
                     {
                     "Sequence" = "3:100"
-                    "DisplayName" = "8:Progress"
+                    "DisplayName" = "8:Status"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdAdminProgressDlg.wid"
@@ -539,7 +555,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_5EC4B296A23444E5BD8318D6FCE25C6A"
                     {
                     "Sequence" = "3:100"
-                    "DisplayName" = "8:Progress"
+                    "DisplayName" = "8:Status"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdProgressDlg.wid"
@@ -583,7 +599,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_1F1F40C9734B4ECAA35DA030E5724069"
                     {
                     "Sequence" = "3:100"
-                    "DisplayName" = "8:Welcome"
+                    "DisplayName" = "8:Willkommen"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdAdminWelcomeDlg.wid"
@@ -631,7 +647,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_60B8168230144479B34ABF8B89ED503E"
                     {
                     "Sequence" = "3:300"
-                    "DisplayName" = "8:Confirm Installation"
+                    "DisplayName" = "8:Installation bestätigen"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdAdminConfirmDlg.wid"
@@ -653,7 +669,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_FA998BEE39A1490088A2656B0A0A5FB0"
                     {
                     "Sequence" = "3:200"
-                    "DisplayName" = "8:Installation Folder"
+                    "DisplayName" = "8:Installationsordner"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdAdminFolderDlg.wid"
@@ -690,7 +706,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_A92E57B059DE4AE5A0ACFC7DD2FD6112"
                     {
                     "Sequence" = "3:100"
-                    "DisplayName" = "8:Finished"
+                    "DisplayName" = "8:Fertig"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdFinishedDlg.wid"
@@ -732,7 +748,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_8916FFBA55784CA6845E582C680F98E3"
             {
-            "SourcePath" = "8:..\\File Sync App\\obj\\Release\\net6.0-windows\\apphost.exe"
+            "SourcePath" = "8:..\\File Sync App\\obj\\Debug\\net6.0-windows\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_16A93A77A73B41F89DB69F3F7B8EA9E8"
