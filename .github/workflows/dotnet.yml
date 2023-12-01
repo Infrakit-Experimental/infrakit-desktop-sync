@@ -1,0 +1,68 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Check out Library
+        uses: actions/checkout@v3
+        with:
+          repository: infrakit-experimental/infrakit-cs-library
+          ref: 'main'
+          path: ./infrakit-cs-library
+      - name: Move dir
+        run: |
+          mkdir ../infrakit-cs-library
+          mkdir ../infrakit-cs-library/Library
+          move infrakit-cs-library/Library/* ../infrakit-cs-library/Library
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1
+      - name: Setup VS Dev Environment
+        uses: seanmiddleditch/gha-setup-vsdevenv@master
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v1
+      - name: Restore Packages
+        working-directory: "File Sync App"
+        run: nuget restore "File Sync App.sln"
+      - name: Create Build Directory
+        run: mkdir _build
+      - name: Build Library
+        working-directory: "../infrakit-cs-library/Library"
+        run: |
+          msbuild.exe "Library.sln" /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:platform="Any CPU" /p:configuration="Release"
+      - name: Build Library
+        working-directory: "../infrakit-cs-library/Library"
+        run: |
+          msbuild.exe "Library.sln" /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:platform="Any CPU" /p:configuration="Debug"
+      - name: Build Solution
+        working-directory: "File Sync App"
+        run: |
+          msbuild.exe "File Sync App.sln" /nologo /nr:false  /p:DeleteExistingFiles=True /p:platform="Any CPU" /p:configuration="Release"
+      - name: Cleanup build files
+        run: |
+          Get-ChildItem -Path . -Recurse -Filter "*.g.cs" | Remove-Item -Force
+      - name: Setup VS Dev Environment
+        uses: seanmiddleditch/gha-setup-vsdevenv@master
+      - name: Build installer
+        working-directory: "File Sync App"
+        continue-on-error: true
+        run: devenv.com "File Sync App.sln" /Build Release /Project Setup
+      - name: Upload artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: FileSyncAppBundle
+          path: "Setup/Release/Setup.msi" 
+
+

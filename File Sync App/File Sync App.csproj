@@ -7,6 +7,7 @@
     <RootNamespace>File_Sync_App</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Resources\Icons\Logo.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -68,12 +69,12 @@
 
   <ItemGroup>
     <Reference Include="Library">
-      <HintPath>..\Library\bin\Debug\net6.0-windows\Library.dll</HintPath>
+      <HintPath>..\..\infrakit-cs-library\Library\bin\Debug\net6.0-windows\Library.dll</HintPath>
     </Reference>
   </ItemGroup>
 
 	<ItemGroup>
-		<Page Update="..\Library\bin\Debug\net6.0-windows\Resources\Languages\German.xaml">
+		<Page Update=".\..\infrakit-cs-library\Library\bin\Debug\net6.0-windows\Resources\Languages\German.xaml">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Page>
 		<Page Update="Resources\Languages\English.xaml">
@@ -96,10 +97,6 @@
 	  <Content Include="Resources\Links.xml">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\..\infrakit-cs-library\Library\Library.csproj" />
 	</ItemGroup>
 
 </Project>
