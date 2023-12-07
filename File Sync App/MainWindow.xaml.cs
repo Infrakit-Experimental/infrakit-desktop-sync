@@ -138,58 +138,7 @@ namespace File_Sync_App
             #endregion remove logs
 
             // Start the automatic sync if it is enabled.
-            #region auto sync
-
-            var autoSync = bool.Parse(Settings.get("autoSync"));
-
-            if(autoSync)
-            {
-                this.btnSyncAutomatic.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
-
-                var type = Settings.getAttribute("autoSync", "Type");
-
-                var timeString = Settings.getAttribute("autoSync", "Time");
-
-                var time = TimeSpan.Parse(timeString);
-                switch (type)
-                {
-                    case "Minutes":
-                        this.cbTime.SelectedIndex = 0;
-                        this.tbTime.Text = ((int)time.TotalMinutes).ToString();
-                        break;
-
-                    case "Hours":
-                        this.cbTime.SelectedIndex = 1;
-                        this.tbTime.Text = ((int)time.TotalHours).ToString();
-
-                        break;
-
-                    case "Days":
-                        this.cbTime.SelectedIndex = 2;
-                        this.tbTime.Text = ((int)time.TotalDays).ToString();
-
-                        break;
-
-                    case "Fixed":
-                        this.cbTime.SelectedIndex = 3;
-
-                        this.tbTimeHours.Text = time.Hours.ToString();
-
-                        var min = time.Minutes;
-                        this.tbTimeMinutes.Text = min.ToString();
-
-                        if (min < 10)
-                        {
-                            this.tbTimeMinutes.Text = "0" + this.tbTimeMinutes.Text;
-                        }
-
-                        break;
-                }
-
-                this.btnSyncAutoStart.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
-            }
-
-            #endregion auto sync
+            this.startAutoSync();
         }
 
         #region listener
@@ -204,8 +153,14 @@ namespace File_Sync_App
             API.clear();
             this.Hide();
 
+            if(this.btnSyncAutoStop.Visibility == Visibility.Visible)
+            {
+                this.btnSyncAutoStop.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+            }
+
             if (!Utils.logIn()) { return; }
 
+            this.startAutoSync();
             this.Show();
         }
 
@@ -667,6 +622,73 @@ namespace File_Sync_App
         }
 
         #endregion listener
+
+        /// <summary>
+        /// Starts the automatic synchronization process based on the user's settings.
+        /// </summary>
+        private void startAutoSync()
+        {
+            var autoSync = bool.Parse(Settings.get("autoSync"));
+
+            if (autoSync)
+            {
+                var languages = Utils.Language.getRDict();
+
+                var result = MessageBox.Show(
+                    languages["main.startAutoSync.message"].ToString(),
+                    languages["main.startAutoSync.caption"].ToString(),
+                    MessageBoxButton.YesNoCancel,
+                    MessageBoxImage.Question
+                );
+
+                if (result == MessageBoxResult.Cancel) return;
+
+                this.btnSyncAutomatic.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+
+                var type = Settings.getAttribute("autoSync", "Type");
+
+                var timeString = Settings.getAttribute("autoSync", "Time");
+
+                var time = TimeSpan.Parse(timeString);
+                switch (type)
+                {
+                    case "Minutes":
+                        this.cbTime.SelectedIndex = 0;
+                        this.tbTime.Text = ((int)time.TotalMinutes).ToString();
+                        break;
+
+                    case "Hours":
+                        this.cbTime.SelectedIndex = 1;
+                        this.tbTime.Text = ((int)time.TotalHours).ToString();
+                        break;
+
+                    case "Days":
+                        this.cbTime.SelectedIndex = 2;
+                        this.tbTime.Text = ((int)time.TotalDays).ToString();
+                        break;
+
+                    case "Fixed":
+                        this.cbTime.SelectedIndex = 3;
+
+                        this.tbTimeHours.Text = time.Hours.ToString();
+
+                        var min = time.Minutes;
+                        this.tbTimeMinutes.Text = min.ToString();
+
+                        if (min < 10)
+                        {
+                            this.tbTimeMinutes.Text = "0" + this.tbTimeMinutes.Text;
+                        }
+
+                        break;
+                }
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    this.btnSyncAutoStart.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+                }
+            }
+        }
 
         #region sync
 

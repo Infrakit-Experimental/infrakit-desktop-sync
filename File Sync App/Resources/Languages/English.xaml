@@ -145,6 +145,9 @@
     <sys:String x:Key="main.time.caption">Time</sys:String>
     <sys:String x:Key="main.time.message">No valid time specified</sys:String>
 
+    <sys:String x:Key="main.startAutoSync.caption">Synchronization</sys:String>
+    <sys:String x:Key="main.startAutoSync.message">Should the automatic synchronization be started?</sys:String>
+
     <sys:String x:Key="main.time.error">Time span too long</sys:String>
     
     <!--#endregion main Window-->
