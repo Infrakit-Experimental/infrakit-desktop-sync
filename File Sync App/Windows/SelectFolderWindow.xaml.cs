@@ -1,5 +1,6 @@
 ﻿using File_Sync_App.Nodes.Folders;
 using Library;
+using System;
 using System.Collections.ObjectModel;
 using System.Windows;
 using static Library.Utils;
@@ -74,13 +75,63 @@ namespace File_Sync_App.InputWindows
             var folder = (Folder)this.tvFolders.SelectedItem;
             int countFolders = folder.countFolders();
 
-            var autoDownload = bool.Parse(Settings.get("autoDownloadDocs"));
+            var autoDownload = true;
 
-            if(!autoDownload)
+            try
             {
-                int max = int.Parse(Settings.getAttribute("autoDownloadDocs", "count"));
+                autoDownload = bool.Parse(Settings.get("autoDownloadDocs"));
+            }
+            catch (Exception ex)
+            {
+                Log.write("selectFolder.autoDownloadDocs: " + ex.GetType() + " | " + ex.Message);
 
-                autoDownload = countFolders <= max;
+                var languages = Utils.Language.getRDict();
+                var result = MessageBox.Show(
+                    languages["selectFolder.autoDownloadDocs.message"].ToString(),
+                    languages["selectFolder.autoDownloadDocs.caption"].ToString(),
+                    MessageBoxButton.OKCancel,
+                    MessageBoxImage.Warning
+                );
+
+                switch (result)
+                {
+                    case MessageBoxResult.Cancel:
+                        return;
+                }
+
+                Settings.@override("autoDownloadDocs", "True");
+            }
+
+            if (!autoDownload)
+            {
+                try
+                {
+                    int max = int.Parse(Settings.getAttribute("autoDownloadDocs", "count"));
+
+                    autoDownload = countFolders <= max;
+                }
+                catch (Exception ex)
+                {
+                    Log.write("selectFolder.autoDownloadDocs.count: " + ex.GetType() + " | " + ex.Message);
+
+                    var languages = Utils.Language.getRDict();
+
+                    var result = MessageBox.Show(
+                        languages["selectFolder.autoDownloadDocs.message"].ToString(),
+                        languages["selectFolder.autoDownloadDocs.caption"].ToString(),
+                        MessageBoxButton.OKCancel,
+                        MessageBoxImage.Warning
+                    );
+
+                    switch (result)
+                    {
+                        case MessageBoxResult.Cancel:
+                            return;
+                    }
+
+                    Settings.@override("autoDownloadDocs", "True");
+                    autoDownload = true;
+                }
             }
 
             if (autoDownload)

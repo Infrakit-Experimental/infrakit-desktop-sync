@@ -2,6 +2,7 @@
 using Library;
 using System;
 using System.Globalization;
+using System.Printing;
 using System.Windows;
 using System.Windows.Controls;
 using static Library.Utils;
@@ -18,12 +19,12 @@ namespace File_Sync_App.InputWindows
         /// <summary>
         /// The time the delet option is / was set.
         /// </summary>
-        private DateTime deletFilesTime;
+        private DateTime? deletFilesTime;
 
         /// <summary>
-        /// The user sets the delet option.
+        /// The user how set the delet option.
         /// </summary>
-        private string deletFilesUser;
+        private string? deletFilesUser;
 
         #endregion variables
 
@@ -66,44 +67,219 @@ namespace File_Sync_App.InputWindows
             // Set the auto download docs setting.
             #region set auto download docs count
 
-            var autoDownload = bool.Parse(Settings.get("autoDownloadDocs"));
+            bool autoDownload = true;
+            try
+            {
+                autoDownload = bool.Parse(Settings.get("autoDownloadDocs"));
+            }
+            catch (Exception ex)
+            {
+                Log.write("setting.errorLoading.autoDownloadDocs: " + ex.GetType() + " | " + ex.Message);
 
-            int count = int.Parse(Settings.getAttribute("autoDownloadDocs", "count"));
-            this.slAutoDownloadDocs.Value = count;
+                Settings.@override("autoDownloadDocs", "True");
 
-            if(autoDownload)
+                var languages = Utils.Language.getRDict();
+                MessageBox.Show(
+                    languages["settings.errorLoading.message"].ToString(),
+                    languages["settings.errorLoading.caption"].ToString(),
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+            }
+
+            int count = (int)this.slAutoDownloadDocs.Maximum;
+
+            
+            if(!autoDownload)
+            {
+                try
+                {
+                    count = int.Parse(Settings.getAttribute("autoDownloadDocs", "count"));
+                }
+                catch (Exception ex)
+                {
+                    Log.write("setting.errorLoading.autoDownloadDocs.count: " + ex.GetType() + " | " + ex.Message);
+
+                    Settings.@override("autoDownloadDocs", "True");
+                    autoDownload = true;
+
+                    var languages = Utils.Language.getRDict();
+                    MessageBox.Show(
+                        languages["settings.errorLoading.message"].ToString(),
+                        languages["settings.errorLoading.caption"].ToString(),
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error
+                    );
+                }
+            }
+
+            if (autoDownload)
             {
                 this.slAutoDownloadDocs.IsEnabled = false;
 
                 this.cbAutoDownloadDocs.IsChecked = true;
             }
 
+            this.slAutoDownloadDocs.Value = count;
+
             #endregion set auto download docs count
 
-            // Set the value of the log storage duration sliders.
+            // Set the value of the log storage duration setting.
             #region set log storage
 
-            this.slLogStorageDuration.Value = Int32.Parse(Settings.get("logStorageDuration"));
+            var logDeletion = false;
 
-            this.slProtocolStorageDuration.Value = Int32.Parse(Settings.get("protocolStorageDuration"));
+            try
+            {
+                logDeletion = bool.Parse(Settings.get("logDeletion"));
+            }
+            catch (Exception ex)
+            {
+                Log.write("setting.errorLoading.logDeletion: " + ex.GetType() + " | " + ex.Message);
+
+                Settings.@override("logDeletion", "False");
+
+                var languages = Utils.Language.getRDict();
+                MessageBox.Show(
+                    languages["settings.errorLoading.message"].ToString(),
+                    languages["settings.errorLoading.caption"].ToString(),
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+            }
+
+            int logDuration = (int)this.slLogStorageDuration.Maximum;
+
+            if (logDeletion)
+            {
+                try
+                {
+                    logDuration = int.Parse(Settings.getAttribute("logDeletion", "duration"));
+                }
+                catch (Exception ex)
+                {
+                    Log.write("setting.errorLoading.logDeletion.duration: " + ex.GetType() + " | " + ex.Message);
+
+                    Settings.@override("logDeletion", "False");
+                    logDeletion = false;
+
+                    var languages = Utils.Language.getRDict();
+                    MessageBox.Show(
+                        languages["settings.errorLoading.message"].ToString(),
+                        languages["settings.errorLoading.caption"].ToString(),
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error
+                    );
+                }
+            }
+
+            if (!logDeletion)
+            {
+                this.slLogStorageDuration.IsEnabled = false;
+
+                this.cbLogDeleteNever.IsChecked = true;
+            }
+
+            this.slLogStorageDuration.Value = logDuration;
 
             #endregion set log storage
+
+            // Set the value of the sync log storage duration setting.
+            #region set sync log storage
+
+            var syncLogDeletion = false;
+
+            try
+            {
+                syncLogDeletion = bool.Parse(Settings.get("syncLogDeletion"));
+            }
+            catch (Exception ex)
+            {
+                Log.write("setting.errorLoading.syncLogDeletion: " + ex.GetType() + " | " + ex.Message);
+
+                Settings.@override("syncLogDeletion", "False");
+
+                var languages = Utils.Language.getRDict();
+                MessageBox.Show(
+                    languages["settings.errorLoading.message"].ToString(),
+                    languages["settings.errorLoading.caption"].ToString(),
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+            }
+
+            int syncLogDuration = (int)this.slSyncLogStorageDuration.Maximum;
+
+            if(syncLogDeletion)
+            {
+                try
+                {
+                    syncLogDuration = int.Parse(Settings.getAttribute("syncLogDeletion", "duration"));
+                }
+                catch (Exception ex)
+                {
+                    Log.write("setting.errorLoading.syncLogDeletion.duration: " + ex.GetType() + " | " + ex.Message);
+
+                    Settings.@override("syncLogDeletion", "False");
+                    syncLogDeletion = false;
+
+                    var languages = Utils.Language.getRDict();
+                    MessageBox.Show(
+                        languages["settings.errorLoading.message"].ToString(),
+                        languages["settings.errorLoading.caption"].ToString(),
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error
+                    );
+                }
+            }
+
+            if (!syncLogDeletion)
+            {
+                this.slSyncLogStorageDuration.IsEnabled = false;
+
+                this.cbSyncLogDeleteNever.IsChecked = true;
+            }
+
+            this.slSyncLogStorageDuration.Value = syncLogDuration;
+
+            #endregion set protocol storage
 
             // Set the delete files setting.
             #region set delet files
 
             if (MainWindow.deleteFoldersAndFiles)
             {
-                this.cbDeleteFiles.IsChecked = true;
+                try
+                {
+                    this.cbDeleteFiles.IsChecked = true;
 
-                this.deletFilesUser = Settings.getAttribute("deleteFoldersAndFiles", "user");
+                    this.deletFilesUser = Settings.getAttribute("deleteFoldersAndFiles", "user");
 
-                var timestamp = Settings.getAttribute("deleteFoldersAndFiles", "timestamp");
-                var result = DateTimeOffset.Parse(timestamp, CultureInfo.InvariantCulture);
-                this.deletFilesTime = result.DateTime;
+                    var timestamp = Settings.getAttribute("deleteFoldersAndFiles", "timestamp");
+                    var result = DateTimeOffset.Parse(timestamp, CultureInfo.InvariantCulture);
+                    this.deletFilesTime = result.DateTime;
 
-                this.tbDeleteFiles.Text = this.deletFilesUser + " (" + this.deletFilesTime.ToString("dd.MM.yyyy HH:mm:ss \"GMT\"zzz") + ")";
-                this.tbDeleteFiles.ToolTip = this.tbDeleteFiles.Text;
+                    this.tbDeleteFiles.Text = this.deletFilesUser + " (" + this.deletFilesTime.Value.ToString("dd.MM.yyyy HH:mm:ss \"GMT\"zzz") + ")";
+                    this.tbDeleteFiles.ToolTip = this.tbDeleteFiles.Text;
+                }
+                catch (Exception ex)
+                {
+                    Log.write("setting.errorLoading.deleteFoldersAndFiles.attributes: " + ex.GetType() + " | " + ex.Message);
+
+                    Settings.@override("deleteFoldersAndFiles", "False");
+                    MainWindow.deleteFoldersAndFiles = false;
+
+                    this.deletFilesUser = null;
+                    this.deletFilesTime = null;
+
+                    var languages = Utils.Language.getRDict();
+                    MessageBox.Show(
+                        languages["settings.errorLoading.message"].ToString(),
+                        languages["settings.errorLoading.caption"].ToString(),
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error
+                    );
+                }
             }
 
             #endregion set delet files
@@ -145,6 +321,8 @@ namespace File_Sync_App.InputWindows
 
         #endregion cbAutoDownloadDocs
 
+        #region delete logs
+
         /// <summary>
         /// Handles the Click event of the btnViewLog Button.
         /// </summary>
@@ -156,6 +334,22 @@ namespace File_Sync_App.InputWindows
 
             logWindow.ShowDialog();
         }
+
+        //TODO: comment
+        private void cbLogDeleteNever_Checked(object sender, RoutedEventArgs e)
+        {
+            this.slLogStorageDuration.IsEnabled = false;
+        }
+
+        //TODO: comment
+        private void cbLogDeleteNever_Unchecked(object sender, RoutedEventArgs e)
+        {
+            this.slLogStorageDuration.IsEnabled = true;
+        }
+
+        #endregion delete logs
+
+        #region delete sync logs
 
         /// <summary>
         /// Handles the Click event of the btnViewSyncLog Button.
@@ -169,6 +363,20 @@ namespace File_Sync_App.InputWindows
             syncProtocolWindow.ShowDialog();
         }
 
+        //TODO: comment
+        private void cbSyncLogDeleteNever_Checked(object sender, RoutedEventArgs e)
+        {
+            this.slSyncLogStorageDuration.IsEnabled = false;
+        }
+
+        //TODO: comment
+        private void cbSyncLogDeleteNever_Unchecked(object sender, RoutedEventArgs e)
+        {
+            this.slSyncLogStorageDuration.IsEnabled = true;
+        }
+
+        #endregion delete sync logs
+
         #region cbDeleteFiles
 
         /// <summary>
@@ -181,7 +389,7 @@ namespace File_Sync_App.InputWindows
             this.deletFilesTime = DateTime.Now;
             this.deletFilesUser = Utils.activeUser;
 
-            this.tbDeleteFiles.Text = this.deletFilesUser + " (" + this.deletFilesTime.ToString("dd.MM.yyyy HH:mm:ss \"GMT\"zzz") + ")";
+            this.tbDeleteFiles.Text = this.deletFilesUser + " (" + this.deletFilesTime.Value.ToString("dd.MM.yyyy HH:mm:ss \"GMT\"zzz") + ")";
             this.tbDeleteFiles.ToolTip = this.tbDeleteFiles.Text;
 
             this.tbDeleteFiles.Visibility = Visibility.Visible;
@@ -195,6 +403,8 @@ namespace File_Sync_App.InputWindows
         private void cbDeleteFiles_Unchecked(object sender, RoutedEventArgs e)
         {
             this.tbDeleteFiles.Visibility = Visibility.Collapsed;
+            this.deletFilesUser = null;
+            this.deletFilesTime = null;
         }
 
         #endregion cbDeleteFiles
@@ -234,12 +444,41 @@ namespace File_Sync_App.InputWindows
             var autoDownloadAnz = (int)this.slAutoDownloadDocs.Value;
 
             Settings.set("autoDownloadDocs", autoDownloadDocs.ToString());
-            Settings.setAttribute("autoDownloadDocs", "count", autoDownloadAnz.ToString());
+
+            if(autoDownloadDocs.HasValue && !autoDownloadDocs.Value)
+            {
+                Settings.setAttribute("autoDownloadDocs", "count", autoDownloadAnz.ToString());
+            }
 
             #endregion autoDownloadDocs
 
-            Settings.set("logStorageDuration", ((int)this.slLogStorageDuration.Value).ToString());
-            Settings.set("protocolStorageDuration", ((int)this.slProtocolStorageDuration.Value).ToString());
+            #region logDeletion
+
+            var logDeletion = !this.cbLogDeleteNever.IsChecked;
+
+            Settings.set("logDeletion", logDeletion.ToString());
+
+            if(logDeletion.HasValue && logDeletion.Value)
+            {
+                var logDeletionDuration = (int)this.slLogStorageDuration.Value;
+                Settings.setAttribute("logDeletion", "duration", logDeletionDuration.ToString());
+            }
+
+            #endregion logDeletion
+
+            #region syncLogDeletion
+
+            var syncLogDeletion = !this.cbSyncLogDeleteNever.IsChecked;
+
+            Settings.set("syncLogDeletion", syncLogDeletion.ToString());
+
+            if (syncLogDeletion.HasValue && syncLogDeletion.Value)
+            {
+                var syncLogDeletionDuration = (int)this.slSyncLogStorageDuration.Value;
+                Settings.setAttribute("syncLogDeletion", "duration", syncLogDeletionDuration.ToString());
+            }
+
+            #endregion syncLogDeletion
 
             Utils.Language.set((this.cbLanguages.SelectedItem as ComboBoxItem).Name);
 
@@ -250,8 +489,8 @@ namespace File_Sync_App.InputWindows
 
             if(MainWindow.deleteFoldersAndFiles)
             {
-                Settings.setAttribute("deleteFoldersAndFiles", "user", Utils.activeUser);
-                Settings.addAttribute("deleteFoldersAndFiles", "timestamp", this.deletFilesTime.ToString("yyyy-MM-dd HH:mm:sszzz"));
+                Settings.setAttribute("deleteFoldersAndFiles", "user", this.deletFilesUser);
+                Settings.addAttribute("deleteFoldersAndFiles", "timestamp", this.deletFilesTime.Value.ToString("yyyy-MM-dd HH:mm:sszzz"));
             }
 
             #endregion delete files

@@ -56,7 +56,30 @@ namespace File_Sync_App
             InitializeComponent();
 
             // Get the delete folders and files flag from the settings.
-            MainWindow.deleteFoldersAndFiles = bool.Parse(Settings.get("deleteFoldersAndFiles"));
+            #region delete folders & files
+
+            MainWindow.deleteFoldersAndFiles = false;
+
+            try
+            {
+                MainWindow.deleteFoldersAndFiles = bool.Parse(Settings.get("deleteFoldersAndFiles"));
+            }
+            catch (Exception ex)
+            {
+                Log.write("main.errorSettings.deleteFoldersAndFiles: " + ex.GetType() + " | " + ex.Message);
+
+                Settings.@override("deleteFoldersAndFiles", "False");
+
+                var languages = Utils.Language.getRDict();
+                MessageBox.Show(
+                    languages["settings.errorLoading.message"].ToString(),
+                    languages["settings.errorLoading.caption"].ToString(),
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+            }
+
+            #endregion delete folders & files
 
             // Read the links from the XML file.
             #region read links
@@ -89,51 +112,143 @@ namespace File_Sync_App
 
             #region log
 
-            var logSaveDur = Int32.Parse(Settings.get("logStorageDuration"));
+            var logDeletion = false;
 
-            string[] logFiles = Directory.EnumerateFiles(Utils.Log.directory, "*.*")
-                 .Select(p => Path.GetFileName(p))
-                 .Where(s => s.EndsWith(".log", StringComparison.OrdinalIgnoreCase))
-                 .Select(e => Path.GetFileNameWithoutExtension(e))
-                 .ToArray();
-
-            foreach (var file in logFiles)
+            try
             {
-                var date = DateOnly.ParseExact(file, "yyyyMMdd");
+                logDeletion = bool.Parse(Settings.get("logDeletion"));
+            }
+            catch(Exception ex)
+            {
+                Log.write("main.errorSettings.logDeletion: " + ex.GetType() + " | " + ex.Message);
 
-                var dur = now.DayNumber - date.DayNumber;
+                Settings.@override("logDeletion", "False");
 
-                if (dur > logSaveDur)
+                var languages = Utils.Language.getRDict();
+                MessageBox.Show(
+                    languages["settings.errorLoading.message"].ToString(),
+                    languages["settings.errorLoading.caption"].ToString(),
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+            }
+
+            if(logDeletion)
+            {
+                int? logSaveDur = null;
+
+                try
                 {
-                    File.Delete(Path.Combine(Utils.Log.directory, file + ".log"));
+                    logSaveDur = int.Parse(Settings.getAttribute("logDeletion", "duration"));
+                }
+                catch (Exception ex)
+                {
+                    Log.write("main.errorSettings.logDeletion.duration: " + ex.GetType() + " | " + ex.Message);
+
+                    Settings.@override("logDeletion", "False");
+
+                    var languages = Utils.Language.getRDict();
+                    MessageBox.Show(
+                        languages["settings.errorLoading.message"].ToString(),
+                        languages["settings.errorLoading.caption"].ToString(),
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error
+                    );
+                }
+
+                if(logSaveDur.HasValue)
+                {
+                    string[] logFiles = Directory.EnumerateFiles(Utils.Log.directory, "*.*")
+                         .Select(p => Path.GetFileName(p))
+                         .Where(s => s.EndsWith(".log", StringComparison.OrdinalIgnoreCase))
+                         .Select(e => Path.GetFileNameWithoutExtension(e))
+                         .ToArray();
+
+                    foreach (var file in logFiles)
+                    {
+                        var date = DateOnly.ParseExact(file, "yyyyMMdd");
+
+                        var dur = now.DayNumber - date.DayNumber;
+
+                        if (dur > logSaveDur.Value)
+                        {
+                            File.Delete(Path.Combine(Utils.Log.directory, file + ".log"));
+                        }
+                    }
                 }
             }
 
             #endregion log
 
-            #region protocol
+            #region sync log 
 
-            var protocolSaveDur = Int32.Parse(Settings.get("protocolStorageDuration"));
+            var syncLogDeletion = false;
 
-            string[] protocolFiles = Directory.EnumerateFiles(Utils.Log.directory, "*.*")
-                 .Select(p => Path.GetFileName(p))
-                 .Where(s => s.EndsWith(".xml", StringComparison.OrdinalIgnoreCase))
-                 .Select(e => Path.GetFileNameWithoutExtension(e))
-                 .ToArray();
-
-            foreach (var file in protocolFiles)
+            try
             {
-                var date = DateOnly.ParseExact(file, "yyyyMMdd");
+                syncLogDeletion = bool.Parse(Settings.get("syncLogDeletion"));
+            }
+            catch (Exception ex)
+            {
+                Log.write("main.errorSettings.syncLogDeletion: " + ex.GetType() + " | " + ex.Message);
 
-                var dur = now.DayNumber - date.DayNumber;
+                Settings.@override("syncLogDeletion", "False");
 
-                if (dur > protocolSaveDur)
+                var languages = Utils.Language.getRDict();
+                MessageBox.Show(
+                    languages["settings.errorLoading.message"].ToString(),
+                    languages["settings.errorLoading.caption"].ToString(),
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+            }
+
+            if (syncLogDeletion)
+            {
+                int? syncLogSaveDur = null;
+
+                try
                 {
-                    System.IO.File.Delete(Path.Combine(Utils.Log.directory, file + ".xml"));
+                    syncLogSaveDur = int.Parse(Settings.getAttribute("syncLogDeletion", "duration"));
+                }
+                catch (Exception ex)
+                {
+                    Log.write("main.errorSettings.syncLogDeletion.duration: " + ex.GetType() + " | " + ex.Message);
+
+                    Settings.@override("syncLogDeletion", "False");
+
+                    var languages = Utils.Language.getRDict();
+                    MessageBox.Show(
+                        languages["settings.errorLoading.message"].ToString(),
+                        languages["settings.errorLoading.caption"].ToString(),
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error
+                    );
+                }
+
+                if(syncLogSaveDur.HasValue)
+                {
+                    string[] protocolFiles = Directory.EnumerateFiles(Utils.Log.directory, "*.*")
+                     .Select(p => Path.GetFileName(p))
+                     .Where(s => s.EndsWith(".xml", StringComparison.OrdinalIgnoreCase))
+                     .Select(e => Path.GetFileNameWithoutExtension(e))
+                     .ToArray();
+
+                    foreach (var file in protocolFiles)
+                    {
+                        var date = DateOnly.ParseExact(file, "yyyyMMdd");
+
+                        var dur = now.DayNumber - date.DayNumber;
+
+                        if (dur > syncLogSaveDur.Value)
+                        {
+                            System.IO.File.Delete(Path.Combine(Utils.Log.directory, file + ".xml"));
+                        }
+                    }
                 }
             }
 
-            #endregion protocol
+            #endregion sync log
 
             #endregion remove logs
 
@@ -382,7 +497,7 @@ namespace File_Sync_App
                     languages["main.time.message"].ToString(),
                     languages["main.time.caption"].ToString(),
                     MessageBoxButton.OK,
-                    MessageBoxImage.Information
+                    MessageBoxImage.Error
                 );
 
                 return;
@@ -628,7 +743,28 @@ namespace File_Sync_App
         /// </summary>
         private void startAutoSync()
         {
-            var autoSync = bool.Parse(Settings.get("autoSync"));
+            bool autoSync;
+
+            try
+            {
+                autoSync = bool.Parse(Settings.get("autoSync"));
+            }
+            catch (Exception ex)
+            {
+                Log.write("main.errorSettings.autoSync: " + ex.GetType() + " | " + ex.Message);
+
+                Settings.@override("autoSync", "False");
+
+                var languages = Utils.Language.getRDict();
+                MessageBox.Show(
+                    languages["settings.errorLoading.message"].ToString(),
+                    languages["settings.errorLoading.caption"].ToString(),
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+
+                return;
+            }
 
             if (autoSync)
             {
@@ -645,9 +781,29 @@ namespace File_Sync_App
 
                 this.btnSyncAutomatic.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
 
-                var type = Settings.getAttribute("autoSync", "Type");
+                var type = "";
+                var timeString = "";
 
-                var timeString = Settings.getAttribute("autoSync", "Time");
+                try
+                {
+                    type = Settings.getAttribute("autoSync", "Type");
+                    timeString = Settings.getAttribute("autoSync", "Time");
+                }
+                catch (Exception ex)
+                {
+                    Log.write("main.errorSettings.autoSync.attributes: " + ex.GetType() + " | " + ex.Message);
+
+                    Settings.@override("autoSync", "False");
+
+                    MessageBox.Show(
+                        languages["settings.errorLoading.message"].ToString(),
+                        languages["settings.errorLoading.caption"].ToString(),
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error
+                    );
+
+                    return;
+                }
 
                 var time = TimeSpan.Parse(timeString);
                 switch (type)
@@ -972,7 +1128,7 @@ namespace File_Sync_App
                 languages["main.time.error"].ToString(),
                 languages["main.time.caption"].ToString(),
                 MessageBoxButton.OK,
-                MessageBoxImage.Warning
+                MessageBoxImage.Error
             );
         }
     }

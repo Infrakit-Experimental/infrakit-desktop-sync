@@ -108,11 +108,13 @@
     <sys:String x:Key="settings.autoDownloadDocs">Anzahl der Ordner für welche ohne zu fragen die Dokumente geladen werden:</sys:String>
     <sys:String x:Key="settings.autoDownloadDocsAll">Immer alle laden</sys:String>
 
-    <sys:String x:Key="settings.log">Speicherdauer der Logs (Tage):</sys:String>
-    <sys:String x:Key="settings.getLog">Logs anzeigen</sys:String>
+    <sys:String x:Key="settings.log.title">Speicherdauer der Logs (Tage):</sys:String>
+    <sys:String x:Key="settings.log.get">Logs anzeigen</sys:String>
+    <sys:String x:Key="settings.log.delete">Logs nicht löschen</sys:String>
 
-    <sys:String x:Key="settings.syncLog">Speicherdauer der Synchronisierungsprotokolle (Tage):</sys:String>
-    <sys:String x:Key="settings.getSyncLog">Sync. Protokolle anzeigen</sys:String>
+    <sys:String x:Key="settings.syncLog.title">Speicherdauer der Synchronisierungsprotokolle (Tage):</sys:String>
+    <sys:String x:Key="settings.syncLog.get">Sync. Protokolle anzeigen</sys:String>
+    <sys:String x:Key="settings.syncLog.delete">Sync. Protokolle nicht löschen</sys:String>
 
     <sys:String x:Key="settings.deleteFiles">Dateien löschen</sys:String>
 
@@ -167,6 +169,13 @@
 
     <!--#endregion link window-->
 
+    <!--#region settings window-->
+
+    <sys:String x:Key="settings.errorLoading.caption">Fehler beim laden</sys:String>
+    <sys:String x:Key="settings.errorLoading.message">Fehler beim laden der Einstellungen, bitte die Einstellungen überprüfen.</sys:String>
+
+    <!--#endregion settings window-->
+
     <!--#region log / sync protocol window-->
 
     <sys:String x:Key="logs.logs.caption">Logs</sys:String>
@@ -181,6 +190,9 @@
 
     <sys:String x:Key="selectFolder.loadDocsQuestion.caption">Dokumente laden</sys:String>
     <sys:String x:Key="selectFolder.loadDocsQuestion.message">Sollen Dokumente geladen werden?</sys:String>
+
+    <sys:String x:Key="selectFolder.autoDownloadDocs.caption">Fehler beim laden der Einstellung</sys:String>
+    <sys:String x:Key="selectFolder.autoDownloadDocs.message">Einstellung konnte nicht geladen werden. Daher werden alle Dokumente geladen.</sys:String>
 
     <!--#endregion select folder window-->
 

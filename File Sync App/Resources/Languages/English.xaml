@@ -108,11 +108,13 @@
     <sys:String x:Key="settings.autoDownloadDocs">Number of folders for which the documents are loaded without asking:</sys:String>
     <sys:String x:Key="settings.autoDownloadDocsAll">Always load all</sys:String>
 
-    <sys:String x:Key="settings.log">Duration of storage of the logs (days):</sys:String>
-    <sys:String x:Key="settings.getLog">View logs</sys:String>
+    <sys:String x:Key="settings.log.title">Duration of storage of the logs (days):</sys:String>
+    <sys:String x:Key="settings.log.get">View logs</sys:String>
+    <sys:String x:Key="settings.log.delete">Do not delete logs</sys:String>
 
-    <sys:String x:Key="settings.syncLog">Duration of storage of synchronization protocols (days):</sys:String>
-    <sys:String x:Key="settings.getSyncLog">View sync protocols</sys:String>
+    <sys:String x:Key="settings.syncLog.title">Duration of storage of synchronization protocols (days):</sys:String>
+    <sys:String x:Key="settings.syncLog.get">View sync protocols</sys:String>
+    <sys:String x:Key="settings.syncLog.delete">Do not delete sync protocols</sys:String>
 
     <sys:String x:Key="settings.deleteFiles">Delete files</sys:String>
 
@@ -167,6 +169,13 @@
 
     <!--#endregion link window-->
 
+    <!--#region settings window-->
+
+    <sys:String x:Key="settings.errorLoading.caption">Error while loading</sys:String>
+    <sys:String x:Key="settings.errorLoading.message">Error loading settings, please check the settings.</sys:String>
+
+    <!--#endregion settings window-->
+
     <!--#region log / sync protocol window-->
 
     <sys:String x:Key="logs.logs.caption">Logs</sys:String>
@@ -181,6 +190,9 @@
 
     <sys:String x:Key="selectFolder.loadDocsQuestion.caption">Load documents</sys:String>
     <sys:String x:Key="selectFolder.loadDocsQuestion.message">Should documents be loaded?</sys:String>
+
+    <sys:String x:Key="selectFolder.autoDownloadDocs.caption">Error loading the setting</sys:String>
+    <sys:String x:Key="selectFolder.autoDownloadDocs.message">Setting could not be loaded. Therefore all documents will be loaded.</sys:String>
 
     <!--#endregion select folder window-->
 

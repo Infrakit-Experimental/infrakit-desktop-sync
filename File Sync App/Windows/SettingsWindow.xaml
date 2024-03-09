@@ -190,12 +190,15 @@
                     <!--#region structure definitions-->
 
                     <Grid.RowDefinitions>
-                        
+
                         <RowDefinition
                             Height="28"/>
 
                         <RowDefinition
                             Height="25"/>
+
+                        <RowDefinition
+                            Height="20"/>
 
                         <RowDefinition
                             Height="30"/>
@@ -207,8 +210,8 @@
                     <!-- TextBlock to display the log storage duration label. -->
                     <TextBlock
                         Grid.Row="0"
-                        Text="{DynamicResource settings.log}"
-                        ToolTip="{DynamicResource settings.log}"
+                        Text="{DynamicResource settings.log.title}"
+                        ToolTip="{DynamicResource settings.log.title}"
                         TextTrimming="CharacterEllipsis"
                         Margin="0,5"
                         HorizontalAlignment="Left"
@@ -228,10 +231,20 @@
                         AutoToolTipPlacement="TopLeft"
                         AutoToolTipPrecision="0"/>
 
+                    <!-- CheckBox to select whether to delete logs. -->
+                    <CheckBox
+                        Grid.Row="2"
+                        x:Name="cbLogDeleteNever"
+                        Content="{DynamicResource settings.log.delete}"
+                        Margin="0,0,0,5"
+                        VerticalAlignment="Top"
+                        Checked="cbLogDeleteNever_Checked"
+                        Unchecked="cbLogDeleteNever_Unchecked"/>
+
                     <!-- Button to view the log. -->
                     <Button
-                        Grid.Row="2"
-                        Content="{DynamicResource settings.getLog}"
+                        Grid.Row="3"
+                        Content="{DynamicResource settings.log.get}"
                         Style="{StaticResource BaseButtonStyle}"
                         Margin="0,5"
                         HorizontalAlignment="Stretch"
@@ -250,12 +263,15 @@
                     <!--#region structure definitions-->
 
                     <Grid.RowDefinitions>
-                        
+
                         <RowDefinition
                             Height="28"/>
 
                         <RowDefinition
                             Height="25"/>
+
+                        <RowDefinition
+                            Height="20"/>
 
                         <RowDefinition
                             Height="30"/>
@@ -267,8 +283,8 @@
                     <!-- TextBlock to display the sync log storage duration label. -->
                     <TextBlock
                         Grid.Row="0"
-                        Text="{DynamicResource settings.syncLog}"
-                        ToolTip="{DynamicResource settings.syncLog}"
+                        Text="{DynamicResource settings.syncLog.title}"
+                        ToolTip="{DynamicResource settings.syncLog.title}"
                         TextTrimming="CharacterEllipsis"
                         Margin="0,5"
                         HorizontalAlignment="Left"
@@ -277,7 +293,7 @@
                     <!-- Slider to select the number of days to store sync logs for. -->
                     <Slider
                         Grid.Row="1"
-                        x:Name="slProtocolStorageDuration"
+                        x:Name="slSyncLogStorageDuration"
                         Margin="0,0,0,5"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Top"
@@ -288,10 +304,20 @@
                         AutoToolTipPlacement="TopLeft"
                         AutoToolTipPrecision="0"/>
 
+                    <!-- CheckBox to select whether to delete sync logs. -->
+                    <CheckBox
+                        Grid.Row="2"
+                        x:Name="cbSyncLogDeleteNever"
+                        Content="{DynamicResource settings.syncLog.delete}"
+                        Margin="0,0,0,5"
+                        VerticalAlignment="Top"
+                        Checked="cbSyncLogDeleteNever_Checked"
+                        Unchecked="cbSyncLogDeleteNever_Unchecked"/>
+                    
                     <!-- Button to view the sync log. -->
                     <Button
-                        Grid.Row="2"
-                        Content="{DynamicResource settings.getSyncLog}"
+                        Grid.Row="3"
+                        Content="{DynamicResource settings.syncLog.get}"
                         Style="{StaticResource BaseButtonStyle}"
                         Margin="0,5"
                         HorizontalAlignment="Stretch"

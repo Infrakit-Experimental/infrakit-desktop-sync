@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <body>
-  <autoDownloadDocs count="7">True</autoDownloadDocs>
-  <logStorageDuration>7</logStorageDuration>
-  <protocolStorageDuration>7</protocolStorageDuration>
+  <autoDownloadDocs>True</autoDownloadDocs>
+  <logDeletion duration="31">True</logDeletion>
+  <syncLogDeletion duration="31">True</syncLogDeletion>
   <deleteFoldersAndFiles>False</deleteFoldersAndFiles>
   <autoSync>False</autoSync>
 </body>
