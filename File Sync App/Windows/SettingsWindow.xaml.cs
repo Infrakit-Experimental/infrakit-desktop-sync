@@ -2,7 +2,6 @@
 using Library;
 using System;
 using System.Globalization;
-using System.Printing;
 using System.Windows;
 using System.Windows.Controls;
 using static Library.Utils;
@@ -283,6 +282,30 @@ namespace File_Sync_App.InputWindows
             }
 
             #endregion set delet files
+
+            // Set the API environment options.
+            #region set environments
+
+            var idx = -1;
+            var j = 0;
+
+            foreach (string env in Enum.GetNames(typeof(API.Environment)))
+            {
+                var cbi = new ComboBoxItem();
+                cbi.Name = env;
+
+                if(string.Equals(env, API.selectedEnv.ToString()))
+                {
+                    idx = j;
+                }
+
+                this.cbEnvironment.Items.Add(env);
+                j++;
+            }
+
+            this.cbEnvironment.SelectedIndex = idx;
+
+            #endregion set environments
         }
 
         #region listeners
@@ -494,6 +517,18 @@ namespace File_Sync_App.InputWindows
             }
 
             #endregion delete files
+
+            #region change environment
+
+            var envName = (string)this.cbEnvironment.SelectedItem;
+            var env = (API.Environment)Enum.Parse(typeof(API.Environment), envName);
+
+            if(API.changeEnvironment(env))
+            {
+                if (!Utils.logIn()) { return; }
+            }
+
+            #endregion change environment
 
             this.DialogResult = true;
             this.Close();

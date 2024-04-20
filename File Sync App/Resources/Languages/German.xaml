@@ -118,6 +118,8 @@
 
     <sys:String x:Key="settings.deleteFiles">Dateien löschen</sys:String>
 
+    <sys:String x:Key="settings.environment">API-Umgebung:</sys:String>
+
     <!--#endregion settings window-->
 
     <!--#region sync protocol window-->

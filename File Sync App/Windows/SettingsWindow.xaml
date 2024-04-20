@@ -64,6 +64,9 @@
                             Height="auto"/>
 
                     <RowDefinition
+                            Height="auto"/>
+
+                    <RowDefinition
                             Height="*"/>
 
                 </Grid.RowDefinitions>
@@ -368,6 +371,45 @@
 
                 <!--#endregion delete files-->
 
+                <!--#region change API environment-->
+
+                <Grid
+                    Grid.Row="5">
+
+                    <!--#region structure definitions-->
+
+                    <Grid.RowDefinitions>
+
+                        <RowDefinition
+                            Height="28"/>
+
+                        <RowDefinition
+                            Height="25"/>
+
+                    </Grid.RowDefinitions>
+
+                    <!--#endregion structure definitions-->
+
+                    <!-- TextBlock to display the environment label. -->
+                    <TextBlock
+                        Grid.Row="0"
+                        Text="{DynamicResource settings.environment}"
+                        Margin="0,5"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"/>
+
+                    <!-- ComboBox to select the environment. -->
+                    <ComboBox
+                        Grid.Row="1"
+                        x:Name="cbEnvironment"
+                        Margin="0,0,0,5"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"/>
+
+                </Grid>
+
+                <!--#endregion API environment-->
+
             </Grid>
 
         </ScrollViewer>
@@ -376,7 +418,7 @@
 
         <!-- This grid contains the OK and Cancel buttons. -->
         <Grid
-            Grid.Row="6"
+            Grid.Row="1"
             Margin="0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">

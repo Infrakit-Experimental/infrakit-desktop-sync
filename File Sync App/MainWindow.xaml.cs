@@ -326,10 +326,7 @@ namespace File_Sync_App
 
             bool? ok = lw.ShowDialog();
 
-            if (ok.HasValue && !ok.Value || !ok.HasValue)
-            {
-                return;
-            }
+            if (ok.HasValue && !ok.Value || !ok.HasValue) return;
 
             this.data.Add(lw.link);
 
