@@ -2,6 +2,7 @@
 using Library;
 using System;
 using System.IO;
+using System.Text;
 using System.Windows;
 using System.Xml;
 
@@ -171,46 +172,6 @@ namespace File_Sync_App.Nodes.Files
 
             #region create
 
-            char[] invalidChars = Path.GetInvalidPathChars();
-            if (this.content.IndexOfAny(invalidChars) >= 0)
-            {
-                var language = Utils.Language.getRDict();
-
-                var message = language["file.invalidCharacters.message"].ToString() + ": (";
-                foreach(var c in Path.GetInvalidPathChars())
-                {
-                    message += c + " ";
-                }
-                message = message.Remove(message.Length - 1);
-                message += ")";
-
-                Utils.Log.write("file.invalidCharacters: \"" + this.content + "\"");
-                MessageBox.Show(
-                    message,
-                    language["file.invalidCharacters.caption"].ToString(),
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error
-                );
-
-                this.isChecked = false;
-                return new Log.File(this.content, Log.SyncStatus.NotSynced, Log.SyncStatus.Error);
-            }
-
-            if (target.Length > 260)
-            {
-                var language = Utils.Language.getRDict();
-                Utils.Log.write("file.pathToLong: \"" + target + "\"");
-                MessageBox.Show(
-                    language["file.pathToLong.message"].ToString(),
-                    language["file.pathToLong.caption"].ToString(),
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error
-                );
-
-                this.isChecked = false;
-                return new Log.File(this.content, Log.SyncStatus.NotSynced, Log.SyncStatus.Error);
-            }
-
             var result = this.download(target);
 
             if (!result.HasValue || !result.Value.status)
@@ -325,7 +286,7 @@ namespace File_Sync_App.Nodes.Files
             {
                 var languages = Utils.Language.getRDict();
 
-                Utils.Log.write("syncFailed.infrakit.file.noTarget: \"" + content + "\"");
+                Utils.Log.write("sync.failed.infrakit.file.noTarget: \"" + this.content + "\"");
                 Utils.AutoClosingMessageBox.Show(
                     languages["links.syncFailed.noTarget.message"].ToString(),
                     languages["links.syncFailed.infrakit.caption"].ToString(),
@@ -339,14 +300,23 @@ namespace File_Sync_App.Nodes.Files
 
             var result = API.Document.download(this.pos, target);
 
-            if (!result.HasValue || !result.Value.status)
+            if (!result.HasValue || result.Value.status != API.Document.Status.Successful)
             {
-                Utils.Log.write("syncFailed.infrakit.file.download: \"" + this.content + "\"");
+                Utils.Log.write("sync.failed.infrakit.file.download: \"" + this.content + "\"");
             }
 
             if (!result.HasValue) return null;
 
-            if (!result.Value.status) return (false, null);
+            if (result.Value.status == API.Document.Status.InvalidFilename ||
+                result.Value.status == API.Document.Status.InvalidPath)
+            {
+                this.isChecked = false;
+                return null;
+            }
+
+            Utils.Log.write("sync.successful.infrakit.file: \"" + this.content + "\"");
+
+            if (result.Value.status != API.Document.Status.Successful) return (false, null);
 
             return (true, System.IO.File.GetLastWriteTimeUtc(target));
         }

@@ -227,7 +227,7 @@
     <!--#region IKFile.cs-->
 
     <sys:String x:Key="file.invalidCharacters.caption">Lokaler Dateiname</sys:String>
-    <sys:String x:Key="file.invalidCharacters.message">Der lokale Pfad enthält ungültige Zeichen.</sys:String>
+    <sys:String x:Key="file.invalidCharacters.message">Der lokale Pfad enthält ungültige Zeichen</sys:String>
 
     <sys:String x:Key="file.pathToLong.caption">Lokaler Dateipfad</sys:String>
     <sys:String x:Key="file.pathToLong.message">Der lokale Pfad ist zu lang</sys:String>

@@ -284,28 +284,7 @@ namespace File_Sync_App.InputWindows
             #endregion set delet files
 
             // Set the API environment options.
-            #region set environments
-
-            var idx = -1;
-            var j = 0;
-
-            foreach (string env in Enum.GetNames(typeof(API.Environment)))
-            {
-                var cbi = new ComboBoxItem();
-                cbi.Name = env;
-
-                if(string.Equals(env, API.selectedEnv.ToString()))
-                {
-                    idx = j;
-                }
-
-                this.cbEnvironment.Items.Add(env);
-                j++;
-            }
-
-            this.cbEnvironment.SelectedIndex = idx;
-
-            #endregion set environments
+            this.setupEnvironments();
         }
 
         #region listeners
@@ -317,7 +296,9 @@ namespace File_Sync_App.InputWindows
         /// <param name="e">The event arguments.</param>
         private void cbLanguages_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            this.setRDict((this.cbLanguages.SelectedItem as ComboBoxItem).Name);
+            var language = (this.cbLanguages.SelectedItem as ComboBoxItem).Name;
+            this.setRDict(language);
+            this.setupEnvironments(language);
         }
 
         #region cbAutoDownloadDocs
@@ -520,9 +501,8 @@ namespace File_Sync_App.InputWindows
 
             #region change environment
 
-            var envName = (string)this.cbEnvironment.SelectedItem;
-            var env = (API.Environment)Enum.Parse(typeof(API.Environment), envName);
-
+            var env = (API.Environment)(this.cbEnvironment.SelectedItem as ComboBoxItem).Tag;
+            
             if(API.changeEnvironment(env))
             {
                 if (!Utils.logIn()) { return; }
@@ -547,5 +527,25 @@ namespace File_Sync_App.InputWindows
         #endregion controls
 
         #endregion listeners
+
+        // TODO: comment
+        private void setupEnvironments(string? language = null)
+        {
+            this.cbEnvironment.Items.Clear();
+            foreach (string env in Enum.GetNames(typeof(API.Environment)))
+            {
+                var cbi = new ComboBoxItem();
+                cbi.Tag = (API.Environment)Enum.Parse(typeof(API.Environment), env);
+
+                cbi.Content = LibraryUtils.getMessage("settings.env." + env.ToLower(), language);
+
+                if (string.Equals(env, API.selectedEnv.ToString()))
+                {
+                    cbi.IsSelected = true;
+                }
+
+                this.cbEnvironment.Items.Add(cbi);
+            }
+        }
     }
 }

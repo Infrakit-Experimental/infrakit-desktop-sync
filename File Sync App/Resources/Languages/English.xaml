@@ -227,7 +227,7 @@
     <!--#region IKFile.cs-->
 
     <sys:String x:Key="file.invalidCharacters.caption">Local file name</sys:String>
-    <sys:String x:Key="file.invalidCharacters.message">The local path contains invalid characters.</sys:String>
+    <sys:String x:Key="file.invalidCharacters.message">The local path contains invalid characters</sys:String>
 
     <sys:String x:Key="file.pathToLong.caption">Local file path</sys:String>
     <sys:String x:Key="file.pathToLong.message">The local path is too long</sys:String>

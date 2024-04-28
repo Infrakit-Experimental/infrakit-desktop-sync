@@ -267,7 +267,7 @@ namespace File_Sync_App.Nodes.Files
             {
                 var languages = Utils.Language.getRDict();
 
-                Utils.Log.write("syncFailed.local.file.noTarget: \"" + this.content + "\"");
+                Utils.Log.write("sync.failed.local.file.noTarget: \"" + this.content + "\"");
                 Utils.AutoClosingMessageBox.Show(
                     languages["links.syncFailed.noTarget.message"].ToString(),
                     languages["links.syncFailed.local.caption"].ToString(),
@@ -279,16 +279,24 @@ namespace File_Sync_App.Nodes.Files
                 return null;
             }
 
-            var result = API.Document.upload(pos, target.Value);
+            var result = API.Document.upload(this.pos, target.Value);
 
-            if (!result.HasValue || !result.Value.status)
+            if (!result.HasValue || result.Value.status != API.Document.Status.Successful)
             {
-                Utils.Log.write("syncFailed.local.file.upload: \"" + this.content + "\"");
+                Utils.Log.write("sync.failed.local.file.upload: \"" + this.content + "\"");
             }
 
             if (!result.HasValue) return null;
 
-            if (!result.Value.status) return (false, null);
+            if (result.Value.status == API.Document.Status.InvalidExtension)
+            {
+                this.isChecked = false;
+                return null;
+            }
+
+            Utils.Log.write("sync.successful.local.file: \"" + this.content + "\"");
+
+            if (result.Value.status != API.Document.Status.Successful) return (false, null);
 
             return (true, result.Value.doc);
         }

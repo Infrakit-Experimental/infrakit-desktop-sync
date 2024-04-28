@@ -379,9 +379,11 @@ namespace File_Sync_App.Nodes.Folders
 
             if (!Directory.Exists(target))
             {
-                Utils.Log.write("syncFailed.infrakit.folder.create: \"" + content + "\"");
+                Utils.Log.write("sync.failed.infrakit.folder.create: \"" + this.content + "\"");
                 return new Log.Folder(content, Log.SyncStatus.NotSynced, Log.SyncStatus.Error);
             }
+
+            Utils.Log.write("sync.successful.infrakit.folder: \"" + this.content + "\"");
 
             #region new folder
 
@@ -424,7 +426,7 @@ namespace File_Sync_App.Nodes.Folders
 
                 if (ikToSync == Log.SyncStatus.Deleted)
                 {
-                    Utils.Log.write("syncFailed.infrakit.folder.create: \"" + content + "\"");
+                    Utils.Log.write("sync.failed.infrakit.folder.create: \"" + content + "\"");
                     log.children.Add(new Log.File(ikFile.content, Log.SyncStatus.NotExisting, Log.SyncStatus.Error));
                     continue;
                 }

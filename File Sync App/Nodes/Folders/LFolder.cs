@@ -379,9 +379,11 @@ namespace File_Sync_App.Nodes.Folders
 
             if (!target.HasValue)
             {
-                Utils.Log.write("syncFailed.local.folder.create: \"" + content + "\"");
+                Utils.Log.write("sync.failed.local.folder.create: \"" + this.content + "\"");
                 return new Log.Folder(content, Log.SyncStatus.Error, Log.SyncStatus.NotSynced);
             }
+
+            Utils.Log.write("sync.successful.local.folder: \"" + this.content + "\"");
 
             #region new folder
 
@@ -424,7 +426,7 @@ namespace File_Sync_App.Nodes.Folders
 
                 if (lToSync == Log.SyncStatus.Deleted)
                 {
-                    Utils.Log.write("syncFailed.local.folder.create: \"" + content + "\"");
+                    Utils.Log.write("sync.failed.local.folder.create: \"" + content + "\"");
                     log.children.Add(new Log.File(lFile.content, Log.SyncStatus.Error, Log.SyncStatus.NotExisting));
                     continue;
                 }
