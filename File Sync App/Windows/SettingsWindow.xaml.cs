@@ -339,13 +339,23 @@ namespace File_Sync_App.InputWindows
             logWindow.ShowDialog();
         }
 
-        //TODO: comment
+        /// <summary>
+        /// Event handler for when the "cbLogDeleteNever" checkbox is checked.
+        /// Disabling the log storage duration slider.
+        /// </summary>
+        /// <param name="sender">The sender of the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void cbLogDeleteNever_Checked(object sender, RoutedEventArgs e)
         {
             this.slLogStorageDuration.IsEnabled = false;
         }
 
-        //TODO: comment
+        /// <summary>
+        /// Event handler for when the "cbLogDeleteNever" checkbox is unchecked.
+        /// Enables the log storage duration slider.
+        /// </summary>
+        /// <param name="sender">The sender of the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void cbLogDeleteNever_Unchecked(object sender, RoutedEventArgs e)
         {
             this.slLogStorageDuration.IsEnabled = true;
@@ -367,13 +377,23 @@ namespace File_Sync_App.InputWindows
             syncProtocolWindow.ShowDialog();
         }
 
-        //TODO: comment
+        /// <summary>
+        /// Event handler for when the "cbSyncLogDeleteNever" checkbox is checked.
+        /// Disabling the sync log storage duration slider.
+        /// </summary>
+        /// <param name="sender">The sender of the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void cbSyncLogDeleteNever_Checked(object sender, RoutedEventArgs e)
         {
             this.slSyncLogStorageDuration.IsEnabled = false;
         }
 
-        //TODO: comment
+        /// <summary>
+        /// Event handler for when the "cbSyncLogDeleteNever" checkbox is unchecked.
+        /// Enables the sync log storage duration slider.
+        /// </summary>
+        /// <param name="sender">The sender of the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void cbSyncLogDeleteNever_Unchecked(object sender, RoutedEventArgs e)
         {
             this.slSyncLogStorageDuration.IsEnabled = true;
@@ -528,7 +548,14 @@ namespace File_Sync_App.InputWindows
 
         #endregion listeners
 
-        // TODO: comment
+        /// <summary>
+        /// Sets up the environments in the ComboBox based on the specified language.
+        /// If no language is provided, the default language is used.
+        /// </summary>
+        /// <param name="language">
+        /// The language to be used for setting up the environments.
+        /// If not provided, the default language is used.
+        /// </param>
         private void setupEnvironments(string? language = null)
         {
             this.cbEnvironment.Items.Clear();
