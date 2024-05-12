@@ -56,6 +56,9 @@
 
                     <RowDefinition
                             Height="auto"/>
+                    
+                    <RowDefinition
+                            Height="auto"/>
 
                     <RowDefinition
                             Height="auto"/>
@@ -185,10 +188,71 @@
 
                 <!--#endregion autoDownloadDocs-->
 
-                <!--#region log-->
+                <!--#region select file by default-->
 
                 <Grid
                     Grid.Row="2">
+
+                    <!--#region structure definitions-->
+
+                    <Grid.RowDefinitions>
+
+                        <RowDefinition
+                            Height="28"/>
+
+                        <RowDefinition
+                            Height="25"/>
+
+                    </Grid.RowDefinitions>
+
+                    <!--#endregion structure definitions-->
+
+                    <!-- TextBlock to display the language label. -->
+                    <TextBlock
+                        Grid.Row="0"
+                        Text="{DynamicResource settings.defaultFileSync.title}"
+                        ToolTip="{DynamicResource settings.defaultFileSync.title}"
+                        Margin="0,5"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"/>
+
+                    <!-- ComboBox to select the language. -->
+                    <ComboBox
+                        Grid.Row="1"
+                        x:Name="cbDefaultFileSync"
+                        Margin="0,0,0,5"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch">
+                        
+                        <!-- ComboBox item for check every time. -->
+                        <ComboBoxItem
+                            x:Name="check"
+                            Content="{DynamicResource settings.defaultFileSync.check}"/>
+
+                        <!-- ComboBox item for local. -->
+                        <ComboBoxItem
+                            x:Name="local"
+                            Content="{DynamicResource settings.defaultFileSync.local}"/>
+
+                        <!-- ComboBox item for infrakit. -->
+                        <ComboBoxItem
+                            x:Name="infrakit"
+                            Content="{DynamicResource settings.defaultFileSync.infrakit}"/>
+
+                        <!-- ComboBox item for none. -->
+                        <ComboBoxItem
+                            x:Name="none"
+                            Content="{DynamicResource settings.defaultFileSync.none}"/>
+                        
+                    </ComboBox>
+                </Grid>
+
+                <!--#endregion select file by default-->
+
+                <!--#region log-->
+
+                <Grid
+                    Grid.Row="3">
 
                     <!--#region structure definitions-->
 
@@ -261,7 +325,7 @@
                 <!--#region syncLog-->
 
                 <Grid
-                    Grid.Row="3">
+                    Grid.Row="4">
 
                     <!--#region structure definitions-->
 
@@ -334,7 +398,7 @@
                 <!--#region delete files-->
 
                 <Grid
-                    Grid.Row="4">
+                    Grid.Row="5">
 
                     <!--#region structure definitions-->
 
@@ -374,7 +438,7 @@
                 <!--#region change API environment-->
 
                 <Grid
-                    Grid.Row="5">
+                    Grid.Row="6">
 
                     <!--#region structure definitions-->
 

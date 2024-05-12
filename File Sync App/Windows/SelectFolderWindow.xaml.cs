@@ -79,7 +79,7 @@ namespace File_Sync_App.InputWindows
 
             try
             {
-                autoDownload = bool.Parse(Settings.get("autoDownloadDocs"));
+                autoDownload = bool.Parse(Utils.Settings.get("autoDownloadDocs"));
             }
             catch (Exception ex)
             {
@@ -99,14 +99,14 @@ namespace File_Sync_App.InputWindows
                         return;
                 }
 
-                Settings.@override("autoDownloadDocs", "True");
+                Utils.Settings.@override("autoDownloadDocs", "True");
             }
 
             if (!autoDownload)
             {
                 try
                 {
-                    int max = int.Parse(Settings.getAttribute("autoDownloadDocs", "count"));
+                    int max = int.Parse(Utils.Settings.getAttribute("autoDownloadDocs", "count"));
 
                     autoDownload = countFolders <= max;
                 }
@@ -129,7 +129,7 @@ namespace File_Sync_App.InputWindows
                             return;
                     }
 
-                    Settings.@override("autoDownloadDocs", "True");
+                    Utils.Settings.@override("autoDownloadDocs", "True");
                     autoDownload = true;
                 }
             }

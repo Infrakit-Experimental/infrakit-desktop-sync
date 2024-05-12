@@ -38,27 +38,43 @@ namespace File_Sync_App.InputWindows
             // Initialize the window components.
             InitializeComponent();
 
+            // Variable to detect if an error occurred
+            // and therefore an error message has to be shown
+            var errorOccurred = false;
+
             // Set the selected language in the ComboBox.
             #region set language
 
-            var prevLanguage = Utils.Language.get();
-
-            var selected = false;
-            foreach (var item in this.cbLanguages.Items)
+            try
             {
-                var i = item as ComboBoxItem;
+                var prevLanguage = Utils.Language.get();
 
-                if (i.Name.Equals(prevLanguage))
+                var selected = false;
+                foreach (var item in this.cbLanguages.Items)
                 {
-                    i.IsSelected = true;
-                    selected = true;
-                    break;
+                    var i = item as ComboBoxItem;
+
+                    if (i.Name.Equals(prevLanguage))
+                    {
+                        i.IsSelected = true;
+                        selected = true;
+                        break;
+                    }
+                }
+
+                if (!selected)
+                {
+                    this.cbLanguages.SelectedIndex = 0;
                 }
             }
-
-            if (!selected)
+            catch (Exception ex)
             {
+                Log.write("settings.error.loading.language: " + ex.GetType() + " | " + ex.Message);
+
+                Utils.Settings.@override("language", "en");
                 this.cbLanguages.SelectedIndex = 0;
+
+                errorOccurred = true;
             }
 
             #endregion set language
@@ -69,21 +85,15 @@ namespace File_Sync_App.InputWindows
             bool autoDownload = true;
             try
             {
-                autoDownload = bool.Parse(Settings.get("autoDownloadDocs"));
+                autoDownload = bool.Parse(Utils.Settings.get("autoDownloadDocs"));
             }
             catch (Exception ex)
             {
-                Log.write("setting.errorLoading.autoDownloadDocs: " + ex.GetType() + " | " + ex.Message);
+                Log.write("settings.error.loading.autoDownloadDocs: " + ex.GetType() + " | " + ex.Message);
 
-                Settings.@override("autoDownloadDocs", "True");
+                Utils.Settings.@override("autoDownloadDocs", "True");
 
-                var languages = Utils.Language.getRDict();
-                MessageBox.Show(
-                    languages["settings.errorLoading.message"].ToString(),
-                    languages["settings.errorLoading.caption"].ToString(),
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error
-                );
+                errorOccurred = true;
             }
 
             int count = (int)this.slAutoDownloadDocs.Maximum;
@@ -93,22 +103,16 @@ namespace File_Sync_App.InputWindows
             {
                 try
                 {
-                    count = int.Parse(Settings.getAttribute("autoDownloadDocs", "count"));
+                    count = int.Parse(Utils.Settings.getAttribute("autoDownloadDocs", "count"));
                 }
                 catch (Exception ex)
                 {
-                    Log.write("setting.errorLoading.autoDownloadDocs.count: " + ex.GetType() + " | " + ex.Message);
+                    Log.write("settings.error.loading.autoDownloadDocs.count: " + ex.GetType() + " | " + ex.Message);
 
-                    Settings.@override("autoDownloadDocs", "True");
+                    Utils.Settings.@override("autoDownloadDocs", "True");
                     autoDownload = true;
 
-                    var languages = Utils.Language.getRDict();
-                    MessageBox.Show(
-                        languages["settings.errorLoading.message"].ToString(),
-                        languages["settings.errorLoading.caption"].ToString(),
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error
-                    );
+                    errorOccurred = true;
                 }
             }
 
@@ -123,6 +127,30 @@ namespace File_Sync_App.InputWindows
 
             #endregion set auto download docs count
 
+            //Set the default file sync setting.
+            #region set default file sync
+
+            this.cbDefaultFileSync.SelectedIndex = 0;
+            if (Settings.defaultFileSync.HasValue)
+            {
+                switch(Settings.defaultFileSync.Value)
+                {
+                    case Settings.FileSync.local:
+                        this.cbDefaultFileSync.SelectedIndex = 1;
+                        break;
+
+                    case Settings.FileSync.infrakit:
+                        this.cbDefaultFileSync.SelectedIndex = 2;
+                        break;
+
+                    case Settings.FileSync.none:
+                        this.cbDefaultFileSync.SelectedIndex = 3;
+                        break;
+                }
+            }
+
+            #endregion set default file sync
+
             // Set the value of the log storage duration setting.
             #region set log storage
 
@@ -130,21 +158,15 @@ namespace File_Sync_App.InputWindows
 
             try
             {
-                logDeletion = bool.Parse(Settings.get("logDeletion"));
+                logDeletion = bool.Parse(Utils.Settings.get("logDeletion"));
             }
             catch (Exception ex)
             {
-                Log.write("setting.errorLoading.logDeletion: " + ex.GetType() + " | " + ex.Message);
+                Log.write("settings.error.loading.logDeletion: " + ex.GetType() + " | " + ex.Message);
 
-                Settings.@override("logDeletion", "False");
+                Utils.Settings.@override("logDeletion", "False");
 
-                var languages = Utils.Language.getRDict();
-                MessageBox.Show(
-                    languages["settings.errorLoading.message"].ToString(),
-                    languages["settings.errorLoading.caption"].ToString(),
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error
-                );
+                errorOccurred = true;
             }
 
             int logDuration = (int)this.slLogStorageDuration.Maximum;
@@ -153,22 +175,16 @@ namespace File_Sync_App.InputWindows
             {
                 try
                 {
-                    logDuration = int.Parse(Settings.getAttribute("logDeletion", "duration"));
+                    logDuration = int.Parse(Utils.Settings.getAttribute("logDeletion", "duration"));
                 }
                 catch (Exception ex)
                 {
-                    Log.write("setting.errorLoading.logDeletion.duration: " + ex.GetType() + " | " + ex.Message);
+                    Log.write("settings.error.loading.logDeletion.duration: " + ex.GetType() + " | " + ex.Message);
 
-                    Settings.@override("logDeletion", "False");
+                    Utils.Settings.@override("logDeletion", "False");
                     logDeletion = false;
 
-                    var languages = Utils.Language.getRDict();
-                    MessageBox.Show(
-                        languages["settings.errorLoading.message"].ToString(),
-                        languages["settings.errorLoading.caption"].ToString(),
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error
-                    );
+                    errorOccurred = true;
                 }
             }
 
@@ -190,21 +206,15 @@ namespace File_Sync_App.InputWindows
 
             try
             {
-                syncLogDeletion = bool.Parse(Settings.get("syncLogDeletion"));
+                syncLogDeletion = bool.Parse(Utils.Settings.get("syncLogDeletion"));
             }
             catch (Exception ex)
             {
-                Log.write("setting.errorLoading.syncLogDeletion: " + ex.GetType() + " | " + ex.Message);
+                Log.write("settings.error.loading.syncLogDeletion: " + ex.GetType() + " | " + ex.Message);
 
-                Settings.@override("syncLogDeletion", "False");
+                Utils.Settings.@override("syncLogDeletion", "False");
 
-                var languages = Utils.Language.getRDict();
-                MessageBox.Show(
-                    languages["settings.errorLoading.message"].ToString(),
-                    languages["settings.errorLoading.caption"].ToString(),
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error
-                );
+                errorOccurred = true;
             }
 
             int syncLogDuration = (int)this.slSyncLogStorageDuration.Maximum;
@@ -213,22 +223,16 @@ namespace File_Sync_App.InputWindows
             {
                 try
                 {
-                    syncLogDuration = int.Parse(Settings.getAttribute("syncLogDeletion", "duration"));
+                    syncLogDuration = int.Parse(Utils.Settings.getAttribute("syncLogDeletion", "duration"));
                 }
                 catch (Exception ex)
                 {
-                    Log.write("setting.errorLoading.syncLogDeletion.duration: " + ex.GetType() + " | " + ex.Message);
+                    Log.write("settings.error.loading.syncLogDeletion.duration: " + ex.GetType() + " | " + ex.Message);
 
-                    Settings.@override("syncLogDeletion", "False");
+                    Utils.Settings.@override("syncLogDeletion", "False");
                     syncLogDeletion = false;
 
-                    var languages = Utils.Language.getRDict();
-                    MessageBox.Show(
-                        languages["settings.errorLoading.message"].ToString(),
-                        languages["settings.errorLoading.caption"].ToString(),
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error
-                    );
+                    errorOccurred = true;
                 }
             }
 
@@ -244,17 +248,17 @@ namespace File_Sync_App.InputWindows
             #endregion set protocol storage
 
             // Set the delete files setting.
-            #region set delet files
+            #region set delete files
 
-            if (MainWindow.deleteFoldersAndFiles)
+            if (Settings.deleteFoldersAndFiles)
             {
                 try
                 {
                     this.cbDeleteFiles.IsChecked = true;
 
-                    this.deletFilesUser = Settings.getAttribute("deleteFoldersAndFiles", "user");
+                    this.deletFilesUser = Utils.Settings.getAttribute("deleteFoldersAndFiles", "user");
 
-                    var timestamp = Settings.getAttribute("deleteFoldersAndFiles", "timestamp");
+                    var timestamp = Utils.Settings.getAttribute("deleteFoldersAndFiles", "timestamp");
                     var result = DateTimeOffset.Parse(timestamp, CultureInfo.InvariantCulture);
                     this.deletFilesTime = result.DateTime;
 
@@ -263,28 +267,30 @@ namespace File_Sync_App.InputWindows
                 }
                 catch (Exception ex)
                 {
-                    Log.write("setting.errorLoading.deleteFoldersAndFiles.attributes: " + ex.GetType() + " | " + ex.Message);
+                    Log.write("settings.error.loading.deleteFoldersAndFiles.attributes: " + ex.GetType() + " | " + ex.Message);
 
-                    Settings.@override("deleteFoldersAndFiles", "False");
-                    MainWindow.deleteFoldersAndFiles = false;
+                    Utils.Settings.@override("deleteFoldersAndFiles", "False");
+                    Settings.deleteFoldersAndFiles = false;
 
                     this.deletFilesUser = null;
                     this.deletFilesTime = null;
 
-                    var languages = Utils.Language.getRDict();
-                    MessageBox.Show(
-                        languages["settings.errorLoading.message"].ToString(),
-                        languages["settings.errorLoading.caption"].ToString(),
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error
-                    );
+                    errorOccurred = true;
                 }
             }
 
             #endregion set delet files
 
             // Set the API environment options.
-            this.setupEnvironments();
+            if(!this.setupEnvironments())
+            {
+                errorOccurred = true;
+            }
+
+            if (errorOccurred)
+            {
+                Settings.showLoadingError();
+            }
         }
 
         #region listeners
@@ -467,25 +473,33 @@ namespace File_Sync_App.InputWindows
             var autoDownloadDocs = this.cbAutoDownloadDocs.IsChecked;
             var autoDownloadAnz = (int)this.slAutoDownloadDocs.Value;
 
-            Settings.set("autoDownloadDocs", autoDownloadDocs.ToString());
+            Utils.Settings.set("autoDownloadDocs", autoDownloadDocs.ToString());
 
             if(autoDownloadDocs.HasValue && !autoDownloadDocs.Value)
             {
-                Settings.setAttribute("autoDownloadDocs", "count", autoDownloadAnz.ToString());
+                Utils.Settings.setAttribute("autoDownloadDocs", "count", autoDownloadAnz.ToString());
             }
 
             #endregion autoDownloadDocs
+
+            #region select file by default
+
+            var defaultFileSyncIdx = this.cbDefaultFileSync.SelectedIndex;
+
+            Settings.setDefaultFileSyncByIdx(defaultFileSyncIdx);
+
+            #endregion select file by default
 
             #region logDeletion
 
             var logDeletion = !this.cbLogDeleteNever.IsChecked;
 
-            Settings.set("logDeletion", logDeletion.ToString());
+            Utils.Settings.set("logDeletion", logDeletion.ToString());
 
             if(logDeletion.HasValue && logDeletion.Value)
             {
                 var logDeletionDuration = (int)this.slLogStorageDuration.Value;
-                Settings.setAttribute("logDeletion", "duration", logDeletionDuration.ToString());
+                Utils.Settings.setAttribute("logDeletion", "duration", logDeletionDuration.ToString());
             }
 
             #endregion logDeletion
@@ -494,27 +508,33 @@ namespace File_Sync_App.InputWindows
 
             var syncLogDeletion = !this.cbSyncLogDeleteNever.IsChecked;
 
-            Settings.set("syncLogDeletion", syncLogDeletion.ToString());
+            Utils.Settings.set("syncLogDeletion", syncLogDeletion.ToString());
 
             if (syncLogDeletion.HasValue && syncLogDeletion.Value)
             {
                 var syncLogDeletionDuration = (int)this.slSyncLogStorageDuration.Value;
-                Settings.setAttribute("syncLogDeletion", "duration", syncLogDeletionDuration.ToString());
+                Utils.Settings.setAttribute("syncLogDeletion", "duration", syncLogDeletionDuration.ToString());
             }
 
             #endregion syncLogDeletion
 
-            Utils.Language.set((this.cbLanguages.SelectedItem as ComboBoxItem).Name);
+            #region language
+
+            var newlanguage = (this.cbLanguages.SelectedItem as ComboBoxItem).Name;
+
+            Utils.Language.set(newlanguage);
+
+            #endregion language
 
             #region delete files
 
-            MainWindow.deleteFoldersAndFiles = this.cbDeleteFiles.IsChecked.Value;
-            Settings.set("deleteFoldersAndFiles", this.cbDeleteFiles.IsChecked.ToString());
+            Settings.deleteFoldersAndFiles = this.cbDeleteFiles.IsChecked.Value;
+            Utils.Settings.set("deleteFoldersAndFiles", this.cbDeleteFiles.IsChecked.ToString());
 
-            if(MainWindow.deleteFoldersAndFiles)
+            if(Settings.deleteFoldersAndFiles)
             {
-                Settings.setAttribute("deleteFoldersAndFiles", "user", this.deletFilesUser);
-                Settings.addAttribute("deleteFoldersAndFiles", "timestamp", this.deletFilesTime.Value.ToString("yyyy-MM-dd HH:mm:sszzz"));
+                Utils.Settings.setAttribute("deleteFoldersAndFiles", "user", this.deletFilesUser);
+                Utils.Settings.addAttribute("deleteFoldersAndFiles", "timestamp", this.deletFilesTime.Value.ToString("yyyy-MM-dd HH:mm:sszzz"));
             }
 
             #endregion delete files
@@ -556,22 +576,36 @@ namespace File_Sync_App.InputWindows
         /// The language to be used for setting up the environments.
         /// If not provided, the default language is used.
         /// </param>
-        private void setupEnvironments(string? language = null)
+        /// <returns>True if the environments are successfully set up; otherwise, false.</returns>
+        private bool setupEnvironments(string? language = null)
         {
-            this.cbEnvironment.Items.Clear();
-            foreach (string env in Enum.GetNames(typeof(API.Environment)))
+            try
             {
-                var cbi = new ComboBoxItem();
-                cbi.Tag = (API.Environment)Enum.Parse(typeof(API.Environment), env);
-
-                cbi.Content = LibraryUtils.getMessage("settings.env." + env.ToLower(), language);
-
-                if (string.Equals(env, API.selectedEnv.ToString()))
+                this.cbEnvironment.Items.Clear();
+                foreach (string env in Enum.GetNames(typeof(API.Environment)))
                 {
-                    cbi.IsSelected = true;
+                    var cbi = new ComboBoxItem();
+                    cbi.Tag = (API.Environment)Enum.Parse(typeof(API.Environment), env);
+
+                    cbi.Content = LibraryUtils.getMessage("settings.env." + env.ToLower(), language);
+
+                    if (string.Equals(env, API.selectedEnv.ToString()))
+                    {
+                        cbi.IsSelected = true;
+                    }
+
+                    this.cbEnvironment.Items.Add(cbi);
                 }
 
-                this.cbEnvironment.Items.Add(cbi);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.write("settings.error.Loading.environments: " + ex.GetType() + " | " + ex.Message);
+                this.cbEnvironment.Items.Clear();
+
+                this.cbEnvironment.IsEnabled = false;
+                return false;
             }
         }
     }

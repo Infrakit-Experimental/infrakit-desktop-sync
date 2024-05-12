@@ -116,7 +116,7 @@ namespace File_Sync_App.Nodes.Files
 
             if (isChangedLocal && isChangedInfrakit)
             {
-                if(Link.newerFileSync is null)
+                if(Settings.defaultFileSync is null)
                 {
                     Log.File log = new Log.File(local.content, Log.SyncStatus.Error, Log.SyncStatus.Error);
                     var thread = new Thread(() =>
@@ -134,17 +134,17 @@ namespace File_Sync_App.Nodes.Files
                     return log;
                 }
 
-                switch(Link.newerFileSync)
+                switch(Settings.defaultFileSync)
                 {
-                    case Link.FileSync.local:
+                    case Settings.FileSync.local:
                         Utils.Log.write("log.sync.bothFilesChangedQuestion.local: \"" + local.content + "\"");
                         return local.upload(infrakit);
 
-                    case Link.FileSync.infrakit:
+                    case Settings.FileSync.infrakit:
                         Utils.Log.write("log.sync.bothFilesChangedQuestion.infrakit: \"" + infrakit.content + "\"");
                         return infrakit.download(local);
 
-                    case Link.FileSync.none:
+                    case Settings.FileSync.none:
                         Utils.Log.write("log.sync.bothFilesChangedQuestion.none: \"" + local.content + "\"");
 
                         local.lastChanged = local.timestamp;

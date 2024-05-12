@@ -375,7 +375,11 @@ namespace File_Sync_App.Nodes.Folders
             #region create folder
 
             var target = Path.Combine(lParent.pos, this.content);
-            Directory.CreateDirectory(target);
+            try
+            {
+                Directory.CreateDirectory(target);
+            }
+            catch (Exception) { }
 
             if (!Directory.Exists(target))
             {
@@ -484,7 +488,7 @@ namespace File_Sync_App.Nodes.Folders
 
             #region delete folder
 
-            if (MainWindow.deleteFoldersAndFiles)
+            if (Settings.deleteFoldersAndFiles)
             {
                 Directory.Delete(lTarget.pos);
 

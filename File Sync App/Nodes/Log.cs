@@ -1,4 +1,5 @@
 ﻿using Library;
+using RestSharp.Serializers.Xml;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -631,7 +632,7 @@ namespace File_Sync_App.Nodes
 
                 body.AppendChild(node);
 
-                doc.Save(path);
+                Utils.secureSave(doc, Utils.Log.directory, path);
             }
         }
 

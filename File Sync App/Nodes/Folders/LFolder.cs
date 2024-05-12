@@ -484,7 +484,7 @@ namespace File_Sync_App.Nodes.Folders
 
             #region delete folder
             
-            if (MainWindow.deleteFoldersAndFiles)
+            if (Settings.deleteFoldersAndFiles)
             {
                 var ikFolder = API.Folder.getMetadata(ikTarget.pos);
                 if (!API.deleteFileFolder(ikFolder.project.id, ikFolder.id.Value))

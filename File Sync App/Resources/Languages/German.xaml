@@ -120,6 +120,12 @@
 
     <sys:String x:Key="settings.environment">API-Umgebung:</sys:String>
 
+    <sys:String x:Key="settings.defaultFileSync.title">Standardmäßig Datei auswahl bei beidseitiger Bearbeitung</sys:String>
+    <sys:String x:Key="settings.defaultFileSync.check">Jedes mal nachfragen</sys:String>
+    <sys:String x:Key="settings.defaultFileSync.none">Keine Datei verändern</sys:String>
+    <sys:String x:Key="settings.defaultFileSync.infrakit">Infrakit Datei herunterladen</sys:String>
+    <sys:String x:Key="settings.defaultFileSync.local">Lokale Datei hochladen</sys:String>
+
     <!--#endregion settings window-->
 
     <!--#region sync protocol window-->
@@ -173,8 +179,7 @@
 
     <!--#region settings window-->
 
-    <sys:String x:Key="settings.errorLoading.caption">Fehler beim laden</sys:String>
-    <sys:String x:Key="settings.errorLoading.message">Fehler beim laden der Einstellungen, bitte die Einstellungen überprüfen.</sys:String>
+    <sys:String x:Key="settings.error.loading.message">Bitte die Einstellungen überprüfen</sys:String>
 
     <!--#endregion settings window-->
 
@@ -224,15 +229,11 @@
 
     <!--#endregion Nodes.cs-->
 
-    <!--#region IKFile.cs-->
+    <!--#region LFile.cs-->
 
-    <sys:String x:Key="file.invalidCharacters.caption">Lokaler Dateiname</sys:String>
-    <sys:String x:Key="file.invalidCharacters.message">Der lokale Pfad enthält ungültige Zeichen</sys:String>
+    <sys:String x:Key="file.error.forbiddenType.message">Nicht erlaubte Dateiendung</sys:String>
 
-    <sys:String x:Key="file.pathToLong.caption">Lokaler Dateipfad</sys:String>
-    <sys:String x:Key="file.pathToLong.message">Der lokale Pfad ist zu lang</sys:String>
-
-    <!--#endregion IKFile.cs-->
+    <!--#endregion LFile.cs-->
 
     <!--#endregion messages-->
 

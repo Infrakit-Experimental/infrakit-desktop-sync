@@ -2,6 +2,8 @@
 using Library;
 using System;
 using System.Globalization;
+using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Xml;
 
@@ -192,7 +194,7 @@ namespace File_Sync_App.Nodes.Files
         {
             this.parent.children.Remove(this);
 
-            if (!MainWindow.deleteFoldersAndFiles)
+            if (!Settings.deleteFoldersAndFiles)
             {
                 ikTarget.isChecked = false;
                 return new Log.File(content, Log.SyncStatus.NotExisting, Log.SyncStatus.Removed);
@@ -279,18 +281,50 @@ namespace File_Sync_App.Nodes.Files
                 return null;
             }
 
-            var result = API.Document.upload(this.pos, target.Value);
+            #region check for forbidden file extensions
 
-            if (!result.HasValue || result.Value.status != API.Document.Status.Successful)
+            string fileExtension = Path.GetExtension(this.pos);
+
+            if (Utils.forbiddenFileExtensions.Contains(fileExtension))
             {
-                Utils.Log.write("sync.failed.local.file.upload: \"" + this.content + "\"");
+                if (!Settings.fileTypeErrorShown)
+                {
+                    var languages = Utils.Language.getRDict();
+                    MessageBox.Show(
+                        Utils.Language.getMessage("file.error.forbiddenType.message"),
+                        LibraryUtils.getMessage("api.document.getUploudURL"),
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error
+                    );
+
+                    Settings.fileTypeErrorShown = true;
+                }
+
+                Utils.Log.write("sync.failed.local.file.forbiddenType: \"" + this.content + "\"");
+                this.isChecked = false;
+                return null;
             }
 
-            if (!result.HasValue) return null;
+            #endregion check for forbidden file extensions
+
+            var result = API.Document.upload(this.pos, target.Value);
+
+            if (!result.HasValue)
+            {
+                Utils.Log.write("sync.failed.local.file.upload: \"" + this.content + "\"");
+                return null;
+            }
 
             if (result.Value.status == API.Document.Status.InvalidExtension)
             {
+                Utils.Log.write("sync.failed.local.file.forbiddenType: \"" + this.content + "\"");
                 this.isChecked = false;
+                return null;
+            }
+
+            if (result.Value.status != API.Document.Status.Successful)
+            {
+                Utils.Log.write("sync.failed.local.file.upload: \"" + this.content + "\"");
                 return null;
             }
 

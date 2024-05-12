@@ -121,7 +121,7 @@ namespace File_Sync_App.Windows
             
             if(this.cbRemember.IsChecked.HasValue && this.cbRemember.IsChecked.Value)
             {
-                Link.newerFileSync = Link.FileSync.local;
+                this.remember(Settings.FileSync.local);
             }
 
             this.Close();
@@ -139,7 +139,7 @@ namespace File_Sync_App.Windows
 
             if (this.cbRemember.IsChecked.HasValue && this.cbRemember.IsChecked.Value)
             {
-                Link.newerFileSync = Link.FileSync.infrakit;
+                this.remember(Settings.FileSync.infrakit);
             }
 
             this.Close();
@@ -160,7 +160,7 @@ namespace File_Sync_App.Windows
 
             if (this.cbRemember.IsChecked.HasValue && this.cbRemember.IsChecked.Value)
             {
-                Link.newerFileSync = Link.FileSync.none;
+                this.remember(Settings.FileSync.none);
             }
             this.Close();
         }
@@ -180,5 +180,16 @@ namespace File_Sync_App.Windows
 
         #endregion listener
 
+        /// <summary>
+        /// Sets the default file synchronization type.
+        /// </summary>
+        /// <param name="type">The synchronization type to set</param>
+        private void remember(Settings.FileSync type)
+        {
+            Settings.defaultFileSync = type;
+
+            var idx = Settings.getDefaultFileSyncIdx(type);
+            Utils.Settings.set("defaultFileSync", idx.ToString());
+        }
     }
 }

@@ -34,11 +34,6 @@ namespace File_Sync_App
         /// </summary>
         private BackgroundWorker bwAutoSync;
 
-        /// <summary>
-        /// A flag that indicates whether or not to delete folders and files when syncing.
-        /// </summary>
-        internal static bool deleteFoldersAndFiles;
-
         #endregion variables
 
         /// <summary>
@@ -55,28 +50,40 @@ namespace File_Sync_App
             // Initialize the window components.
             InitializeComponent();
 
-            // Get the delete folders and files flag from the settings.
-            #region delete folders & files
-
-            MainWindow.deleteFoldersAndFiles = false;
+            // Get the default file sync flag from the settings
+            #region default file sync
 
             try
             {
-                MainWindow.deleteFoldersAndFiles = bool.Parse(Settings.get("deleteFoldersAndFiles"));
+                var defaultFileSyncIdx = Int32.Parse(Utils.Settings.get("defaultFileSync"));
+
+                Settings.setDefaultFileSyncByIdx(defaultFileSyncIdx);
             }
             catch (Exception ex)
             {
-                Log.write("main.errorSettings.deleteFoldersAndFiles: " + ex.GetType() + " | " + ex.Message);
+                Log.write("main.error.loading.defaultFileSync: " + ex.GetType() + " | " + ex.Message);
 
-                Settings.@override("deleteFoldersAndFiles", "False");
+                Utils.Settings.@override("defaultFileSync", "0");
 
-                var languages = Utils.Language.getRDict();
-                MessageBox.Show(
-                    languages["settings.errorLoading.message"].ToString(),
-                    languages["settings.errorLoading.caption"].ToString(),
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error
-                );
+                Settings.showLoadingError();
+            }
+
+            #endregion default file sync
+
+            // Get the delete folders and files flag from the settings.
+            #region delete folders & files
+
+            try
+            {
+                Settings.deleteFoldersAndFiles = bool.Parse(Utils.Settings.get("deleteFoldersAndFiles"));
+            }
+            catch (Exception ex)
+            {
+                Log.write("main.error.loading.deleteFoldersAndFiles: " + ex.GetType() + " | " + ex.Message);
+
+                Utils.Settings.@override("deleteFoldersAndFiles", "False");
+
+                Settings.showLoadingError();
             }
 
             #endregion delete folders & files
@@ -116,21 +123,15 @@ namespace File_Sync_App
 
             try
             {
-                logDeletion = bool.Parse(Settings.get("logDeletion"));
+                logDeletion = bool.Parse(Utils.Settings.get("logDeletion"));
             }
             catch(Exception ex)
             {
-                Log.write("main.errorSettings.logDeletion: " + ex.GetType() + " | " + ex.Message);
+                Log.write("main.error.loading.logDeletion: " + ex.GetType() + " | " + ex.Message);
 
-                Settings.@override("logDeletion", "False");
+                Utils.Settings.@override("logDeletion", "False");
 
-                var languages = Utils.Language.getRDict();
-                MessageBox.Show(
-                    languages["settings.errorLoading.message"].ToString(),
-                    languages["settings.errorLoading.caption"].ToString(),
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error
-                );
+                Settings.showLoadingError();
             }
 
             if(logDeletion)
@@ -139,21 +140,15 @@ namespace File_Sync_App
 
                 try
                 {
-                    logSaveDur = int.Parse(Settings.getAttribute("logDeletion", "duration"));
+                    logSaveDur = int.Parse(Utils.Settings.getAttribute("logDeletion", "duration"));
                 }
                 catch (Exception ex)
                 {
-                    Log.write("main.errorSettings.logDeletion.duration: " + ex.GetType() + " | " + ex.Message);
+                    Log.write("main.error.loading.logDeletion.duration: " + ex.GetType() + " | " + ex.Message);
 
-                    Settings.@override("logDeletion", "False");
+                    Utils.Settings.@override("logDeletion", "False");
 
-                    var languages = Utils.Language.getRDict();
-                    MessageBox.Show(
-                        languages["settings.errorLoading.message"].ToString(),
-                        languages["settings.errorLoading.caption"].ToString(),
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error
-                    );
+                    Settings.showLoadingError();
                 }
 
                 if(logSaveDur.HasValue)
@@ -186,21 +181,15 @@ namespace File_Sync_App
 
             try
             {
-                syncLogDeletion = bool.Parse(Settings.get("syncLogDeletion"));
+                syncLogDeletion = bool.Parse(Utils.Settings.get("syncLogDeletion"));
             }
             catch (Exception ex)
             {
-                Log.write("main.errorSettings.syncLogDeletion: " + ex.GetType() + " | " + ex.Message);
+                Log.write("main.error.loading.syncLogDeletion: " + ex.GetType() + " | " + ex.Message);
 
-                Settings.@override("syncLogDeletion", "False");
+                Utils.Settings.@override("syncLogDeletion", "False");
 
-                var languages = Utils.Language.getRDict();
-                MessageBox.Show(
-                    languages["settings.errorLoading.message"].ToString(),
-                    languages["settings.errorLoading.caption"].ToString(),
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error
-                );
+                Settings.showLoadingError();
             }
 
             if (syncLogDeletion)
@@ -209,21 +198,15 @@ namespace File_Sync_App
 
                 try
                 {
-                    syncLogSaveDur = int.Parse(Settings.getAttribute("syncLogDeletion", "duration"));
+                    syncLogSaveDur = int.Parse(Utils.Settings.getAttribute("syncLogDeletion", "duration"));
                 }
                 catch (Exception ex)
                 {
-                    Log.write("main.errorSettings.syncLogDeletion.duration: " + ex.GetType() + " | " + ex.Message);
+                    Log.write("main.error.loading.syncLogDeletion.duration: " + ex.GetType() + " | " + ex.Message);
 
-                    Settings.@override("syncLogDeletion", "False");
+                    Utils.Settings.@override("syncLogDeletion", "False");
 
-                    var languages = Utils.Language.getRDict();
-                    MessageBox.Show(
-                        languages["settings.errorLoading.message"].ToString(),
-                        languages["settings.errorLoading.caption"].ToString(),
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error
-                    );
+                    Settings.showLoadingError();
                 }
 
                 if(syncLogSaveDur.HasValue)
@@ -504,12 +487,12 @@ namespace File_Sync_App
 
             #region save auto sync to settings
 
-            Settings.set("autoSync", "True");
+            Utils.Settings.set("autoSync", "True");
 
             var selectedType = this.cbTime.SelectedItem as ComboBoxItem;
 
-            Settings.addAttribute("autoSync", "Type", selectedType.Tag.ToString());
-            Settings.addAttribute("autoSync", "Time", timeSpan.Value.ToString());
+            Utils.Settings.addAttribute("autoSync", "Type", selectedType.Tag.ToString());
+            Utils.Settings.addAttribute("autoSync", "Time", timeSpan.Value.ToString());
 
             #endregion save auto sync to settings
 
@@ -558,7 +541,7 @@ namespace File_Sync_App
 
             Utils.Log.write("log.sync.automatic.end");
 
-            Settings.set("autoSync", "False");
+            Utils.Settings.set("autoSync", "False");
 
             API.maxErrorDisplayTime = new TimeSpan(0, 15, 0);
 
@@ -744,21 +727,15 @@ namespace File_Sync_App
 
             try
             {
-                autoSync = bool.Parse(Settings.get("autoSync"));
+                autoSync = bool.Parse(Utils.Settings.get("autoSync"));
             }
             catch (Exception ex)
             {
-                Log.write("main.errorSettings.autoSync: " + ex.GetType() + " | " + ex.Message);
+                Log.write("main.error.loading.autoSync: " + ex.GetType() + " | " + ex.Message);
 
-                Settings.@override("autoSync", "False");
+                Utils.Settings.@override("autoSync", "False");
 
-                var languages = Utils.Language.getRDict();
-                MessageBox.Show(
-                    languages["settings.errorLoading.message"].ToString(),
-                    languages["settings.errorLoading.caption"].ToString(),
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error
-                );
+                Settings.showLoadingError();
 
                 return;
             }
@@ -783,21 +760,16 @@ namespace File_Sync_App
 
                 try
                 {
-                    type = Settings.getAttribute("autoSync", "Type");
-                    timeString = Settings.getAttribute("autoSync", "Time");
+                    type = Utils.Settings.getAttribute("autoSync", "Type");
+                    timeString = Utils.Settings.getAttribute("autoSync", "Time");
                 }
                 catch (Exception ex)
                 {
-                    Log.write("main.errorSettings.autoSync.attributes: " + ex.GetType() + " | " + ex.Message);
+                    Log.write("main.error.loading.autoSync.attributes: " + ex.GetType() + " | " + ex.Message);
 
-                    Settings.@override("autoSync", "False");
+                    Utils.Settings.@override("autoSync", "False");
 
-                    MessageBox.Show(
-                        languages["settings.errorLoading.message"].ToString(),
-                        languages["settings.errorLoading.caption"].ToString(),
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error
-                    );
+                    Settings.showLoadingError();
 
                     return;
                 }
@@ -921,11 +893,13 @@ namespace File_Sync_App
 
             }, DispatcherPriority.Background);
 
+            Settings.fileTypeErrorShown = false;
+
             Nodes.Log.Sync logs = new Nodes.Log.Sync();
 
             foreach (var link in links)
             {
-                logs.add(link.sync());
+                logs.add(link.Sync());
 
                 #region update progress bar
 

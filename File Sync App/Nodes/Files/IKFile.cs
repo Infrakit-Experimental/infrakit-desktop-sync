@@ -172,7 +172,7 @@ namespace File_Sync_App.Nodes.Files
 
             #region create
 
-            var result = this.download(target);
+            var result = this.download(target, this.content);
 
             if (!result.HasValue || !result.Value.status)
             {
@@ -209,7 +209,7 @@ namespace File_Sync_App.Nodes.Files
         {
             this.parent.children.Remove(this);
 
-            if (!MainWindow.deleteFoldersAndFiles)
+            if (!Settings.deleteFoldersAndFiles)
             { 
                 lTarget.isChecked = false;
                 return new Log.File(content, Log.SyncStatus.Removed, Log.SyncStatus.NotExisting);
@@ -250,7 +250,7 @@ namespace File_Sync_App.Nodes.Files
         /// <returns>A Log.File object representing the sync status of the file.</returns>
         internal Log.File download(LFile local)
         {
-            var result = this.download(local.pos);
+            var result = this.download(local.pos, local.content);
 
             if (!result.HasValue)
             {
@@ -273,16 +273,17 @@ namespace File_Sync_App.Nodes.Files
         /// <summary>
         /// Downloads the file from the Infrakit server.
         /// </summary>
-        /// <param name="target">The local file to download to.</param>
+        /// <param name="target">The local file to download to.</param>, string targetFileName
+        /// <param name="targetFileName">The file name of the document to be downloaded.</param>
         /// <returns>
         /// A tuple containing
         /// a boolean indicating whether the download was successful and
         /// a DateTime? indicating the last write time of the downloaded file,
         /// or null if the download failed.
         /// </returns>
-        private (bool status, DateTime? timestamp)? download(string? target)
+        private (bool status, DateTime? timestamp)? download(string? target, string? targetFileName)
         {
-            if (target is null)
+            if (target is null || targetFileName is null)
             {
                 var languages = Utils.Language.getRDict();
 
@@ -298,7 +299,7 @@ namespace File_Sync_App.Nodes.Files
                 return null;
             }
 
-            var result = API.Document.download(this.pos, target);
+            var result = API.Document.download(this.pos, target, targetFileName);
 
             if (!result.HasValue || result.Value.status != API.Document.Status.Successful)
             {

@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <body>
-  <autoDownloadDocs>True</autoDownloadDocs>
-  <logDeletion duration="31">True</logDeletion>
-  <syncLogDeletion duration="31">True</syncLogDeletion>
-  <deleteFoldersAndFiles>False</deleteFoldersAndFiles>
-  <autoSync>False</autoSync>
+	<autoDownloadDocs>True</autoDownloadDocs>
+	<logDeletion duration="31">True</logDeletion>
+	<syncLogDeletion duration="31">True</syncLogDeletion>
+	<deleteFoldersAndFiles>False</deleteFoldersAndFiles>
+	<autoSync>False</autoSync>
+	<defaultFileSync>0</defaultFileSync>
 </body>

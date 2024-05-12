@@ -120,6 +120,12 @@
 
     <sys:String x:Key="settings.environment">API environment:</sys:String>
 
+    <sys:String x:Key="settings.defaultFileSync.title">Default file selection when editing on both sides</sys:String>
+    <sys:String x:Key="settings.defaultFileSync.check">Ask every time</sys:String>
+    <sys:String x:Key="settings.defaultFileSync.none">Do not change any file</sys:String>
+    <sys:String x:Key="settings.defaultFileSync.infrakit">Download Infrakit file</sys:String>
+    <sys:String x:Key="settings.defaultFileSync.local">Upload local file</sys:String>
+
     <!--#endregion settings window-->
 
     <!--#region sync protocol window-->
@@ -173,8 +179,7 @@
 
     <!--#region settings window-->
 
-    <sys:String x:Key="settings.errorLoading.caption">Error while loading</sys:String>
-    <sys:String x:Key="settings.errorLoading.message">Error loading settings, please check the settings.</sys:String>
+    <sys:String x:Key="settings.error.loading.message">Please check the settings</sys:String>
 
     <!--#endregion settings window-->
 
@@ -198,6 +203,13 @@
 
     <!--#endregion select folder window-->
 
+    <!--#region sync window-->
+
+    <sys:String x:Key="sync.linksSynced.caption">Sync data</sys:String>
+    <sys:String x:Key="sync.linksSynced.message">All active links have been synced</sys:String>
+
+    <!--#endregion sync window-->
+
     <!--#region Link.cs-->
 
     <sys:String x:Key="links.updateFailed.caption">Update</sys:String>
@@ -208,13 +220,6 @@
 
     <!--#endregion Link.cs-->
 
-    <!--#region sync window-->
-
-    <sys:String x:Key="sync.linksSynced.caption">Sync data</sys:String>
-    <sys:String x:Key="sync.linksSynced.message">All active links have been synced</sys:String>
-
-    <!--#endregion sync window-->
-
     <!--#region Nodes.cs-->
 
     <sys:String x:Key="links.syncFailed.local.caption">Upload the local files</sys:String>
@@ -224,15 +229,11 @@
 
     <!--#endregion Nodes.cs-->
 
-    <!--#region IKFile.cs-->
+    <!--#region LFile.cs-->
 
-    <sys:String x:Key="file.invalidCharacters.caption">Local file name</sys:String>
-    <sys:String x:Key="file.invalidCharacters.message">The local path contains invalid characters</sys:String>
+    <sys:String x:Key="file.error.forbiddenType.message">Forbidden file extension</sys:String>
 
-    <sys:String x:Key="file.pathToLong.caption">Local file path</sys:String>
-    <sys:String x:Key="file.pathToLong.message">The local path is too long</sys:String>
-
-    <!--#endregion IKFile.cs-->
+    <!--#endregion LFile.cs-->
 
     <!--#endregion messages-->
 

@@ -50,22 +50,6 @@ namespace File_Sync_App
         /// </summary>
         public bool active { get; set; }
 
-        /// <summary>
-        /// A nullable field that stores the source of the newer version of a file.
-        /// Or null if the User has to deside for every file.
-        /// </summary>
-        internal static FileSync? newerFileSync = null;
-
-        /// <summary>
-        /// Represents the source of the newer version of a file
-        /// </summary>
-        internal enum FileSync
-        {
-            local,
-            infrakit,
-            none
-        }
-
         #endregion variables
 
         /// <summary>
@@ -224,7 +208,7 @@ namespace File_Sync_App
         /// Syncs the local folder and Infrakit folder associated with the link.
         /// </summary>
         /// <returns>A <see cref="Log.Link"/> object containing the results of the sync operation.</returns>
-        internal Nodes.Log.Link sync()
+        internal Nodes.Log.Link Sync()
         {
             var lData = this.localData.getRoot();
             var ikData = this.infrakitData.getRoot();
@@ -232,7 +216,7 @@ namespace File_Sync_App
             try
             {
                 Utils.Log.write("log.sync.start: \"" + this.name + "\"");
-                Link.newerFileSync = null;
+                Settings.defaultFileSync = null;
 
                 Nodes.Log.Folder logRoot;
 
