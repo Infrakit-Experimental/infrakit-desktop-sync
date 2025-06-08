@@ -8,7 +8,7 @@
     xmlns:root="clr-namespace:File_Sync_App.Nodes"
     mc:Ignorable="d"
     Title="{DynamicResource link.title.new}"
-    Icon="/Resources/Icons/Logo.ico"
+    Icon="pack://application:,,,/Library;component/Resources/Icons/Logo.ico"
     Height="500"
     Width="800"
     MinHeight="250"
@@ -90,7 +90,7 @@
             <Button
                 Grid.Column="2"
                 x:Name="btnUpdate"
-                Style="{StaticResource BaseButtonStyle}"
+                Style="{StaticResource IKSecondaryButton}"
                 Margin="5"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
@@ -164,41 +164,13 @@
 					Margin="5"
 					HorizontalAlignment="Stretch"
 					VerticalAlignment="Stretch"
+                    Style="{StaticResource IKSecondarySubtleIcon}"
 					Click="btnLocalData_Click"
-					ToolTip="{DynamicResource link.ttFolder}"
-                    BorderBrush="{x:Null}"
-                    Foreground="{x:Null}"
-                    Background="{x:Null}"
-                    BorderThickness="0">
+					ToolTip="{DynamicResource link.ttFolder}">
 
                     <Image
-						Source="/Resources/Icons/HamburgerSettings.ico"
+						Source="/Resources/Icons/Menu.ico"
 						Stretch="UniformToFill"/>
-
-                    <!-- Trigger to reduce the opacity of the button when it is disabled. -->
-                    <Button.Style>
-                        
-                        <Style 
-                            TargetType="Button">
-                            
-                            <Style.Triggers>
-                                
-                                <Trigger 
-                                    Property="IsEnabled" 
-                                    Value="False">
-                                    
-                                    <Setter 
-                                        Property="Opacity" 
-                                        Value="0.5" />
-                                    
-                                </Trigger>
-                                
-                            </Style.Triggers>
-                            
-                        </Style>
-                        
-                    </Button.Style>
-
                 </Button>
 
                 <!-- TextBlock to display the local label. -->
@@ -212,115 +184,55 @@
 
             </Grid>
 
-            <!-- Scrollviewer to allow the user to scroll through the treeview if it is too large to fit in the available space. -->
-            <ScrollViewer
-				Grid.Row="1"
-                x:Name="svLocal"
-				Margin="5"
-				HorizontalAlignment="Stretch"
-				VerticalAlignment="Stretch"
-				HorizontalScrollBarVisibility="Auto"
-				VerticalScrollBarVisibility="Disabled"
-				BorderBrush="Black">
+            <!-- Treeview to display the local data. -->
+            <TreeView
+	            Grid.Row="1"
+	            x:Name="tvLocalData"
+	            Margin="5"
+	            HorizontalAlignment="Stretch"
+	            VerticalAlignment="Stretch"
+	            ItemsSource="{
+		            Binding RelativeSource={RelativeSource AncestorType=Window},
+		            Path=localData
+	            }">
 
-                <Grid>
+                <!-- ItemContainerStyle to expand or collapse the TreeViewItem elements based on the IsExpanded property of the associated Node object. -->
+                <TreeView.ItemContainerStyle>
 
-                    <!-- Treeview to display the local data. -->
-                    <TreeView
-						x:Name="tvLocalData"
-						Margin="0"
-						HorizontalAlignment="Stretch"
-						VerticalAlignment="Stretch"
-						BorderBrush="{x:Null}"
-						ItemsSource="{
-							Binding RelativeSource={RelativeSource AncestorType=Window},
-							Path=localData
-						}">
+                    <Style
+                        TargetType="{x:Type TreeViewItem}">
 
-                        <!-- ItemContainerStyle to expand or collapse the TreeViewItem elements based on the IsExpanded property of the associated Node object. -->
-                        <TreeView.ItemContainerStyle>
-                            
-                            <Style
-                                TargetType="{x:Type TreeViewItem}">
-                                
-                                <Setter
-                                    Property="IsExpanded"
-                                    Value="{
-                                        Binding Path=(root:ItemHelper.IsExpanded),
-										Mode=TwoWay
-                                    }"/>
-                                
-                            </Style>
-                            
-                        </TreeView.ItemContainerStyle>
+                        <Setter
+                            Property="IsExpanded"
+                            Value="{
+                                Binding Path=(root:ItemHelper.IsExpanded),
+					            Mode=TwoWay
+                            }"/>    
 
-                        <!-- CheckBox to select or deselect the Node object. -->
-                        <TreeView.Resources>
-                            
-                            <HierarchicalDataTemplate
-								DataType="{x:Type root:Node}"
-								ItemsSource="{Binding children}">
+                    </Style>
 
-                                <CheckBox
-									Content="{Binding content}"
-									IsChecked="{
-										Binding Path=isChecked,
-										Mode=TwoWay
-									}"
-									Click="cbLocalData_Click">
+                </TreeView.ItemContainerStyle>
 
-                                    <!-- Style and Trigger to change the foreground color of the CheckBox element when the IsChecked property is false for the CheckBox element-->
-                                    <CheckBox.Style>
-                                        
-                                        <Style
-											TargetType="{x:Type CheckBox}">
+                <!-- CheckBox to select or deselect the Node object. -->
+                <TreeView.Resources>
 
-                                            <Setter
-												Property="Foreground"
-												Value="Black"/>
+                    <HierarchicalDataTemplate
+			            DataType="{x:Type root:Node}"
+			            ItemsSource="{Binding children}">
 
-                                            <Setter
-												Property="Visibility"
-												Value="Visible"/>
+                        <CheckBox
+				            Content="{Binding content}"
+				            IsChecked="{
+					            Binding Path=isChecked,
+					            Mode=TwoWay
+				            }"
+				            Click="cbLocalData_Click"/>
 
-                                            <Style.Triggers>
-                                                
-                                                <DataTrigger
-													Binding="{Binding Path=IsChecked}"
-													Value="False">
+                    </HierarchicalDataTemplate>
 
-                                                    <Setter
-														Property="Foreground"
-														Value="LightGray"/>
+                </TreeView.Resources>
 
-                                                </DataTrigger>
-                                                
-                                            </Style.Triggers>
-                                            
-                                        </Style>
-                                        
-                                    </CheckBox.Style>
-                                    
-                                </CheckBox>
-                                
-                            </HierarchicalDataTemplate>
-                            
-                        </TreeView.Resources>
-                        
-                    </TreeView>
-
-                    <!-- Rectangle to provide a border for the treeview. -->
-                    <Rectangle
-						Margin="0"
-						HorizontalAlignment="Stretch"
-						VerticalAlignment="Stretch"
-						Stroke="#FFABADB3"
-						RadiusX="3"
-						RadiusY="3"/>
-
-                </Grid>
-
-            </ScrollViewer>
+            </TreeView>
 
             <!-- Grid to contain the buttons and the checkbox for interacting with the local folders. -->
             <Grid
@@ -350,39 +262,12 @@
                     Margin="5,5,0,5"
 					HorizontalAlignment="Stretch"
 					VerticalAlignment="Stretch"
-                    BorderBrush="{x:Null}"
-                    Foreground="{x:Null}"
-                    Background="{x:Null}"
-                    BorderThickness="0"
+                    Style="{StaticResource IKSecondarySubtleIcon}"
                     Click="btnOpenAllLocal_Click">
 
                     <Image
-						Source="/Resources/Icons/OpenAll.ico"
+						Source="/Resources/Icons/List-expand.ico"
 						Stretch="UniformToFill"/>
-
-                    <!-- Trigger to reduce the opacity of the button when it is disabled. -->
-                    <Button.Style>
-                        
-                        <Style
-                            TargetType="Button">
-                            
-                            <Style.Triggers>
-                                
-                                <Trigger
-                                    Property="IsEnabled"
-                                    Value="False">
-                                    
-                                    <Setter
-                                        Property="Opacity"
-                                        Value="0.5" />
-                                    
-                                </Trigger>
-                                
-                            </Style.Triggers>
-                            
-                        </Style>
-                        
-                    </Button.Style>
                     
                 </Button>
 
@@ -393,39 +278,12 @@
                     Margin="0,5,5,5"
 					HorizontalAlignment="Stretch"
 					VerticalAlignment="Stretch"
-                    BorderBrush="{x:Null}"
-                    Foreground="{x:Null}"
-                    Background="{x:Null}"
-                    BorderThickness="0"
+                    Style="{StaticResource IKSecondarySubtleIcon}"
                     Click="btnCloseAllLocal_Click">
 
                     <Image
-						Source="/Resources/Icons/CloseAll.ico"
+						Source="/Resources/Icons/List-collapse.ico"
 						Stretch="UniformToFill"/>
-
-                    <!-- Trigger to reduce the opacity of the button when it is disabled. -->
-                    <Button.Style>
-                        
-                        <Style
-                            TargetType="Button">
-                            
-                            <Style.Triggers>
-                                
-                                <Trigger
-                                    Property="IsEnabled"
-                                    Value="False">
-                                    
-                                    <Setter
-                                        Property="Opacity"
-                                        Value="0.5" />
-                                    
-                                </Trigger>
-                                
-                            </Style.Triggers>
-                            
-                        </Style>
-                        
-                    </Button.Style>
                     
                 </Button>
 
@@ -515,39 +373,12 @@
                     Width="20"
                     Click="btnInfrakitProject_Click"
                     ToolTip="{DynamicResource link.ttProject}"
-                    BorderBrush="{x:Null}"
-                    Foreground="{x:Null}"
-                    Background="{x:Null}"
-                    BorderThickness="0"
+                    Style="{StaticResource IKSecondarySubtleIcon}"
                     Visibility="Collapsed">
 
                     <Image
-                        Source="/Resources/Icons/HamburgerSettings.ico"
+                        Source="/Resources/Icons/Menu.ico"
                         Stretch="UniformToFill"/>
-
-                    <!-- Trigger to reduce the opacity of the button when it is disabled. -->
-                    <Button.Style>
-                        
-                        <Style 
-                            TargetType="Button">
-                            
-                            <Style.Triggers>
-                                
-                                <Trigger 
-                                    Property="IsEnabled" 
-                                    Value="False">
-                                    
-                                    <Setter 
-                                        Property="Opacity" 
-                                        Value="0.5" />
-                                    
-                                </Trigger>
-                                
-                            </Style.Triggers>
-                            
-                        </Style>
-                        
-                    </Button.Style>
 
                 </Button>
 
@@ -563,39 +394,12 @@
                     Height="20"
                     Width="20"
                     ToolTip="{DynamicResource link.ttFolder}"
-                    BorderBrush="{x:Null}"
-                    Foreground="{x:Null}"
-                    Background="{x:Null}"
-                    BorderThickness="0"
+                    Style="{StaticResource IKSecondarySubtleIcon}"
                     Visibility="Collapsed">
 
                     <Image
-                        Source="/Resources/Icons/HamburgerSettings.ico"
+                        Source="/Resources/Icons/Menu.ico"
                         Stretch="UniformToFill"/>
-
-                    <!-- Trigger to reduce the opacity of the button when it is disabled. -->
-                    <Button.Style>
-                        
-                        <Style
-                            TargetType="Button">
-                            
-                            <Style.Triggers>
-                                
-                                <Trigger 
-                                    Property="IsEnabled" 
-                                    Value="False">
-                                    
-                                    <Setter 
-                                        Property="Opacity" 
-                                        Value="0.5" />
-                                    
-                                </Trigger>
-                                
-                            </Style.Triggers>
-                            
-                        </Style>
-                        
-                    </Button.Style>
 
                 </Button>
 
@@ -642,115 +446,55 @@
 
             </Grid>
 
-            <!-- Scrollviewer to allow the user to scroll through the treeview if it is too large to fit in the available space. -->
-            <ScrollViewer
+            <!-- Treeview to display the Infrakit data. -->
+            <TreeView
                 Grid.Row="1"
-                x:Name="svInfrakit"
+                x:Name="tvInfrakitData"
                 Margin="5"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
-                HorizontalScrollBarVisibility="Auto"
-                VerticalScrollBarVisibility="Disabled"
-                BorderBrush="Black">
+                ItemsSource="{
+                    Binding RelativeSource={RelativeSource AncestorType=Window},
+                    Path=infrakitData
+                }">
 
-                <Grid>
+                <!-- ItemContainerStyle to expand or collapse the TreeViewItem elements based on the IsExpanded property of the associated Node object. -->
+                <TreeView.ItemContainerStyle>
 
-                    <!-- Treeview to display the Infrakit data. -->
-                    <TreeView
-                        x:Name="tvInfrakitData"
-                        Margin="0"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        BorderBrush="{x:Null}"
-                        ItemsSource="{
-                            Binding RelativeSource={RelativeSource AncestorType=Window},
-                            Path=infrakitData
-                        }">
+                    <Style
+                        TargetType="{x:Type TreeViewItem}">
 
-                        <!-- ItemContainerStyle to expand or collapse the TreeViewItem elements based on the IsExpanded property of the associated Node object. -->
-                        <TreeView.ItemContainerStyle>
-                            
-                            <Style
-                                TargetType="{x:Type TreeViewItem}">
+                        <Setter
+                            Property="IsExpanded"
+                            Value="{
+                                Binding Path=(root:ItemHelper.IsExpanded),
+					            Mode=TwoWay
+                            }"/>    
 
-                                <Setter
-                                    Property="IsExpanded"
-                                    Value="{
-                                        Binding Path=(root:ItemHelper.IsExpanded),
-										Mode=TwoWay
-                                    }"/>
+                    </Style>
 
-                            </Style>
-                            
-                        </TreeView.ItemContainerStyle>
+                </TreeView.ItemContainerStyle>
 
-                        <!-- CheckBox to select or deselect the Node object. -->
-                        <TreeView.Resources>
-                            
-                            <HierarchicalDataTemplate
-                                DataType="{x:Type root:Node}"
-                                ItemsSource="{Binding children}">
+                <!-- CheckBox to select or deselect the Node object. -->
+                <TreeView.Resources>
 
-                                <CheckBox
-                                    Content="{Binding content}"
-                                    IsChecked="{
-                                        Binding Path=isChecked,
-                                        Mode=TwoWay
-                                    }"
-                                    Click="cbInfrakitData_Click">
+                    <HierarchicalDataTemplate
+                        DataType="{x:Type root:Node}"
+                        ItemsSource="{Binding children}">
 
-                                    <!-- Style and Trigger to change the foreground color of the CheckBox element when the IsChecked property is false for the CheckBox element-->
-                                    <CheckBox.Style>
-                                        
-                                        <Style
-                                            TargetType="{x:Type CheckBox}">
+                        <CheckBox
+                            Content="{Binding content}"
+                            IsChecked="{
+                                Binding Path=isChecked,
+                                Mode=TwoWay
+                            }"
+                            Click="cbInfrakitData_Click"/>
 
-                                            <Setter
-                                                Property="Foreground"
-                                                Value="Black"/>
+                    </HierarchicalDataTemplate>
 
-                                            <Setter
-                                                Property="Visibility"
-                                                Value="Visible"/>
+                </TreeView.Resources>
 
-                                            <Style.Triggers>
-                                                
-                                                <DataTrigger
-                                                    Binding="{Binding Path=IsChecked}"
-                                                    Value="False">
-
-                                                    <Setter
-                                                        Property="Foreground"
-                                                        Value="LightGray"/>
-
-                                                </DataTrigger>
-                                                
-                                            </Style.Triggers>
-                                            
-                                        </Style>
-                                        
-                                    </CheckBox.Style>
-                                    
-                                </CheckBox>
-                                
-                            </HierarchicalDataTemplate>
-                            
-                        </TreeView.Resources>
-                                                
-                    </TreeView>
-
-                    <!-- Rectangle to provide a border for the treeview. -->
-                    <Rectangle
-                        Margin="0"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        Stroke="#FFABADB3"
-                        RadiusX="3"
-                        RadiusY="3"/>
-
-                </Grid>
-
-            </ScrollViewer>
+            </TreeView>
 
             <!-- Grid to contain the buttons and the checkbox for interacting with the Infrakit folders. -->
             <Grid
@@ -780,39 +524,12 @@
                     Margin="5,5,0,5"
 					HorizontalAlignment="Stretch"
 					VerticalAlignment="Stretch"
-                    BorderBrush="{x:Null}"
-                    Foreground="{x:Null}"
-                    Background="{x:Null}"
-                    BorderThickness="0"
+                    Style="{StaticResource IKSecondarySubtleIcon}"
                     Click="btnOpenAllInfrakit_Click">
 
                     <Image
-						Source="/Resources/Icons/OpenAll.ico"
+						Source="/Resources/Icons/List-expand.ico"
 						Stretch="UniformToFill"/>
-
-                    <!-- Trigger to reduce the opacity of the button when it is disabled. -->
-                    <Button.Style>
-                        
-                        <Style
-                            TargetType="Button">
-                            
-                            <Style.Triggers>
-                                
-                                <Trigger
-                                    Property="IsEnabled" 
-                                    Value="False">
-                                    
-                                    <Setter 
-                                        Property="Opacity" 
-                                        Value="0.5" />
-                                    
-                                </Trigger>
-                            
-                            </Style.Triggers>
-                            
-                        </Style>
-                        
-                    </Button.Style>
                     
                 </Button>
 
@@ -823,39 +540,12 @@
                     Margin="0,5,5,5"
 					HorizontalAlignment="Stretch"
 					VerticalAlignment="Stretch"
-                    BorderBrush="{x:Null}"
-                    Foreground="{x:Null}"
-                    Background="{x:Null}"
-                    BorderThickness="0"
+                    Style="{StaticResource IKSecondarySubtleIcon}"
                     Click="btnCloseAllInfrakit_Click">
 
                     <Image
-						Source="/Resources/Icons/CloseAll.ico"
+						Source="/Resources/Icons/List-collapse.ico"
 						Stretch="UniformToFill"/>
-
-                    <!-- Trigger to reduce the opacity of the button when it is disabled. -->
-                    <Button.Style>
-                        
-                        <Style 
-                            TargetType="Button">
-                            
-                            <Style.Triggers>
-                                
-                                <Trigger 
-                                    Property="IsEnabled" 
-                                    Value="False">
-                                    
-                                    <Setter 
-                                        Property="Opacity" 
-                                        Value="0.5" />
-                                    
-                                </Trigger>
-                                
-                            </Style.Triggers>
-                            
-                        </Style>
-                        
-                    </Button.Style>
                     
                 </Button>
 
@@ -900,27 +590,28 @@
 
             <!--#endregion structure definitions-->
 
-            <!-- This button clicks to save the settings and close the window. -->
-            <Button
-                Grid.Column="0"
-                x:Name="btnOk"
-                Content="{DynamicResource ok}"
-                Style="{StaticResource BaseButtonStyle}"
-                Margin="5"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
-                Click="btnOk_Click"/>
 
             <!-- This button clicks to close the window without saving the settings. -->
             <Button
-                Grid.Column="1"
+                Grid.Column="0"
                 x:Name="btnCancel"
                 Content="{DynamicResource cancel}"
-                Style="{StaticResource BaseButtonStyle}"
+                Style="{StaticResource IKSecondaryButton}"
                 Margin="5"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
                 Click="btnCancel_Click"/>
+            
+            <!-- This button clicks to save the settings and close the window. -->
+            <Button
+                Grid.Column="1"
+                x:Name="btnOk"
+                Content="{DynamicResource ok}"
+                Style="{StaticResource IKPrimaryButton}"
+                Margin="5"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Click="btnOk_Click"/>
 
         </Grid>
 

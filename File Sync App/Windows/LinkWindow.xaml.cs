@@ -305,7 +305,7 @@ namespace File_Sync_App
         /// <param name="e">The event arguments.</param>
         private void cbUpload_Checked(object sender, RoutedEventArgs e)
         {
-            this.svLocal.IsEnabled = true;
+            this.tvLocalData.IsEnabled = true;
             this.btnCloseAllLocal.IsEnabled = true;
             this.btnOpenAllLocal.IsEnabled = true;
 
@@ -323,7 +323,7 @@ namespace File_Sync_App
         /// <param name="e">The event arguments.</param>
         private void cbUpload_Unchecked(object sender, RoutedEventArgs e)
         {
-            this.svLocal.IsEnabled = false;
+            this.tvLocalData.IsEnabled = false;
             this.btnCloseAllLocal.IsEnabled = false;
             this.btnOpenAllLocal.IsEnabled = false;
 
@@ -464,7 +464,7 @@ namespace File_Sync_App
         /// <param name="e">The event arguments.</param>
         private void cbDownload_Checked(object sender, RoutedEventArgs e)
         {
-            this.svInfrakit.IsEnabled = true;
+            this.tvInfrakitData.IsEnabled = true;
             this.btnOpenAllInfrakit.IsEnabled = true;
             this.btnCloseAllInfrakit.IsEnabled = true;
 
@@ -482,7 +482,7 @@ namespace File_Sync_App
         /// <param name="e">The event arguments.</param>
         private void cbDownload_Unchecked(object sender, RoutedEventArgs e)
         {
-            this.svInfrakit.IsEnabled = false;
+            this.tvInfrakitData.IsEnabled = false;
             this.btnOpenAllInfrakit.IsEnabled = false;
             this.btnCloseAllInfrakit.IsEnabled = false;
 

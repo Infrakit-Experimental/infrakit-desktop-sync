@@ -8,7 +8,7 @@
     xmlns:root="clr-namespace:File_Sync_App.Nodes"
     mc:Ignorable="d"
     Title="{DynamicResource selectFolder.title}"
-    Icon="/Resources/Icons/Logo.ico"
+    Icon="pack://application:,,,/Library;component/Resources/Icons/Logo.ico"
     Height="350"
     Width="250"
     WindowStartupLocation="CenterScreen">
@@ -30,73 +30,49 @@
 
         <!--#endregion structure definitions-->
 
-        <!-- Scrollviewer to allow the user to scroll through the treeview if it is too large to fit in the available space. -->
-        <ScrollViewer
+        <!-- Treeview to display the folder structure. -->
+        <TreeView
             Grid.Row="0"
+            x:Name="tvFolders"
             Margin="5"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            HorizontalScrollBarVisibility="Auto"
-            VerticalScrollBarVisibility="Disabled"
-            BorderBrush="Black">
+            BorderBrush="{x:Null}"
+            ItemsSource="{
+                Binding RelativeSource={RelativeSource AncestorType=Window},
+                Path=data
+            }"
+            SelectedItemChanged="tvFolders_SelectedItemChanged">
 
-            <Grid>
+            <!-- Resources definition to display the nodes content of the treeview. -->
+            <TreeView.Resources>
 
-                <!-- Treeview to display the folder structure. -->
-                <TreeView
-                    x:Name="tvFolders"
-                    Margin="0"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    BorderBrush="{x:Null}"
-                    ItemsSource="{
-                        Binding RelativeSource={RelativeSource AncestorType=Window},
-                        Path=data
-                    }"
-                    SelectedItemChanged="tvFolders_SelectedItemChanged">
+                <HierarchicalDataTemplate
+                    DataType="{x:Type root:Node}"
+                    ItemsSource="{Binding children}">
 
-                    <!-- Resources definition to display the nodes content of the treeview. -->
-                    <TreeView.Resources>
+                    <TextBlock
+                        Text="{Binding content}"/>
 
-                        <HierarchicalDataTemplate
-                            DataType="{x:Type root:Node}"
-                            ItemsSource="{Binding children}">
+                </HierarchicalDataTemplate>
 
-                            <TextBlock
-                                Text="{Binding content}"/>
+            </TreeView.Resources>
 
-                        </HierarchicalDataTemplate>
-                        
-                    </TreeView.Resources>
+            <!-- ItemContainerStyle definition to expand all TreeViewItem elements by default. -->
+            <TreeView.ItemContainerStyle>
 
-                    <!-- ItemContainerStyle definition to expand all TreeViewItem elements by default. -->
-                    <TreeView.ItemContainerStyle>
-                        
-                        <Style
-                            TargetType="{x:Type TreeViewItem}">
+                <Style
+                    TargetType="{x:Type TreeViewItem}">
 
-                            <Setter
-                                Property="IsExpanded"
-                                Value="True"/>
+                    <Setter
+                        Property="IsExpanded"
+                        Value="True"/>
 
-                        </Style>
-                        
-                    </TreeView.ItemContainerStyle>
-                    
-                </TreeView>
+                </Style>
 
-                <!-- Rectangle border around the treeview. -->
-                <Rectangle
-                    Margin="0"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    Stroke="#FFABADB3"
-                    RadiusX="3"
-                    RadiusY="3"/>
+            </TreeView.ItemContainerStyle>
 
-            </Grid>
-            
-        </ScrollViewer>
+        </TreeView>
 
         <!--#region controls-->
 
@@ -121,27 +97,27 @@
 
             <!--#endregion structure definitions-->
 
-            <!-- This button clicks to save the settings and close the window. -->
-            <Button
-                Grid.Column="0"
-                x:Name="btnOk"
-                Content="{DynamicResource ok}"
-                Style="{StaticResource BaseButtonStyle}"
-                Margin="5"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
-                Click="btnOk_Click"/>
-
             <!-- This button clicks to close the window without saving the settings. -->
             <Button
                 Grid.Column="1"
                 x:Name="btnCancel"
                 Content="{DynamicResource cancel}"
-                Style="{StaticResource BaseButtonStyle}"
+                Style="{StaticResource IKPrimaryButton}"
                 Margin="5"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
                 Click="btnCancel_Click"/>
+
+            <!-- This button clicks to save the settings and close the window. -->
+            <Button
+                Grid.Column="0"
+                x:Name="btnOk"
+                Content="{DynamicResource ok}"
+                Style="{StaticResource IKSecondaryButton}"
+                Margin="5"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Click="btnOk_Click"/>
 
         </Grid>
 

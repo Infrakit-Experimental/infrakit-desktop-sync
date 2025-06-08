@@ -7,7 +7,7 @@
     xmlns:local="clr-namespace:File_Sync_App.InputWindows"
     mc:Ignorable="d"
     Title="{DynamicResource settings.title}"
-    Icon="/Resources/Icons/Logo.ico"
+    Icon="pack://application:,,,/Library;component/Resources/Icons/Logo.ico"
     Height="410"
     Width="275"
     MinHeight="150"
@@ -56,7 +56,7 @@
 
                     <RowDefinition
                             Height="auto"/>
-                    
+
                     <RowDefinition
                             Height="auto"/>
 
@@ -77,7 +77,7 @@
                 <!--#endregion structure definitions-->
 
                 <!--#region language-->
-                
+
                 <Grid
                     Grid.Row="0">
 
@@ -111,6 +111,7 @@
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
                         SelectionChanged="cbLanguages_SelectionChanged">
+
 
                         <!-- ComboBox item for English. -->
                         <ComboBoxItem
@@ -223,7 +224,7 @@
                         Margin="0,0,0,5"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch">
-                        
+
                         <!-- ComboBox item for check every time. -->
                         <ComboBoxItem
                             x:Name="check"
@@ -243,7 +244,7 @@
                         <ComboBoxItem
                             x:Name="none"
                             Content="{DynamicResource settings.defaultFileSync.none}"/>
-                        
+
                     </ComboBox>
                 </Grid>
 
@@ -312,7 +313,7 @@
                     <Button
                         Grid.Row="3"
                         Content="{DynamicResource settings.log.get}"
-                        Style="{StaticResource BaseButtonStyle}"
+                        Style="{StaticResource IKSecondaryButton}"
                         Margin="0,5"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
@@ -380,12 +381,12 @@
                         VerticalAlignment="Top"
                         Checked="cbSyncLogDeleteNever_Checked"
                         Unchecked="cbSyncLogDeleteNever_Unchecked"/>
-                    
+
                     <!-- Button to view the sync log. -->
                     <Button
                         Grid.Row="3"
                         Content="{DynamicResource settings.syncLog.get}"
-                        Style="{StaticResource BaseButtonStyle}"
+                        Style="{StaticResource IKSecondaryButton}"
                         Margin="0,5"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
@@ -403,7 +404,7 @@
                     <!--#region structure definitions-->
 
                     <Grid.RowDefinitions>
-                        
+
                         <RowDefinition
                             Height="25"/>
 
@@ -490,7 +491,7 @@
             <!--#region structure definitions-->
 
             <Grid.ColumnDefinitions>
-                
+
                 <ColumnDefinition
                     Width="*"/>
 
@@ -503,10 +504,10 @@
 
             <!-- This button clicks to save the settings and close the window. -->
             <Button
-                Grid.Column="0"
+                Grid.Column="1"
                 x:Name="btnOk"
                 Content="{DynamicResource ok}"
-                Style="{StaticResource BaseButtonStyle}"
+                Style="{StaticResource IKPrimaryButton}"
                 Margin="5"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
@@ -514,10 +515,10 @@
 
             <!-- This button clicks to close the window without saving the settings. -->
             <Button
-                Grid.Column="1"
+                Grid.Column="0"
                 x:Name="btnCancel"
                 Content="{DynamicResource cancel}"
-                Style="{StaticResource BaseButtonStyle}"
+                Style="{StaticResource IKSecondaryButton}"
                 Margin="5"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"

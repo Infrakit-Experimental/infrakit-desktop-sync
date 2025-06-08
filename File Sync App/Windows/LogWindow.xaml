@@ -7,11 +7,11 @@
     xmlns:local="clr-namespace:File_Sync_App.Windows"
     mc:Ignorable="d"
     Title="{DynamicResource log.title}"
-    Icon="/Resources/Icons/Logo.ico"
+    Icon="pack://application:,,,/Library;component/Resources/Icons/Logo.ico"
     Height="450"
-    Width="800"
-    MinHeight="100"
-    MinWidth="200"
+    Width="300"
+    MinHeight="210"
+    MinWidth="210"
     ResizeMode="CanResize"
     WindowStartupLocation="CenterScreen">
 
@@ -45,16 +45,6 @@
             SelectedDateChanged="dpLogs_SelectedDateChanged"
             FirstDayOfWeek="Monday"/>
 
-        <!-- Rectangle to provide a border for the log viewer. -->
-        <Rectangle
-			Grid.Row="1"
-		    Margin="5"
-		    HorizontalAlignment="Stretch"
-		    VerticalAlignment="Stretch"
-		    Stroke="#FFABADB3"
-		    RadiusX="3"
-		    RadiusY="3"/>
-
         <!-- Scrollviewer to allow the user to scroll through the treeview if it is too large to fit in the available space. -->
         <ScrollViewer
 			Grid.Row="1"
@@ -73,14 +63,6 @@
 				    HorizontalAlignment="Stretch"
 				    VerticalAlignment="Stretch"/>
 
-                <!-- Rectangle to provide a border for the log data. -->
-                <Rectangle
-				    Margin="0"
-				    HorizontalAlignment="Stretch"
-				    VerticalAlignment="Stretch"
-				    Stroke="#FFABADB3"
-				    RadiusX="3"
-				    RadiusY="3"/>
 
             </Grid>
 

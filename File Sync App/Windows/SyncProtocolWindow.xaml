@@ -8,7 +8,7 @@
     xmlns:root="clr-namespace:File_Sync_App"
     mc:Ignorable="d"
     Title="{DynamicResource syncProtocol.title}"
-    Icon="/Resources/Icons/Logo.ico"
+    Icon="pack://application:,,,/Library;component/Resources/Icons/Logo.ico"
     Height="450"
     Width="800"
     MinHeight="100"
@@ -95,7 +95,7 @@
                 Click="btnOpenAll_Click">
 
                 <Image
-					Source="/Resources/Icons/OpenAll.ico"
+					Source="/Resources/Icons/List-expand.ico"
 					Stretch="UniformToFill"/>
 
                 <!-- Item container style trigger for the listbox items. -->
@@ -139,7 +139,7 @@
                 Click="btnCloseAll_Click">
 
                 <Image
-					Source="/Resources/Icons/CloseAll.ico"
+					Source="/Resources/Icons/List-collapse.ico"
 					Stretch="UniformToFill"/>
 
                 <!-- Item container style trigger for the listbox items. -->
@@ -175,43 +175,17 @@
         <Rectangle
 			Grid.Row="1"
 			Margin="5"
+            Style="{StaticResource BorderRectangle}"
 			HorizontalAlignment="Stretch"
-			VerticalAlignment="Stretch"
-			Stroke="#FFABADB3"
-			RadiusX="3"
-			RadiusY="3"/>
+			VerticalAlignment="Stretch"/>
 
-        <!-- Scrollviewer to allow the user to scroll through the treeview if it is too large to fit in the available space. -->
-        <ScrollViewer
+        <TreeView
+			x:Name="tvData"
 			Grid.Row="1"
 			Margin="5"
 			HorizontalAlignment="Stretch"
 			VerticalAlignment="Stretch"
-			HorizontalScrollBarVisibility="Auto"
-			VerticalScrollBarVisibility="Auto">
-
-            <Grid>
-
-                <!-- Rectangle border around the scrollViewer. -->
-                <Rectangle
-					Margin="0"
-					HorizontalAlignment="Stretch"
-					VerticalAlignment="Stretch"
-					Stroke="#FFABADB3"
-					RadiusX="3"
-					RadiusY="3"/>
-
-                <!-- Treeview to display the data. -->
-                <TreeView
-					x:Name="tvData"
-					Margin="0"
-					HorizontalAlignment="Stretch"
-					VerticalAlignment="Stretch"
-					BorderBrush="{x:Null}"/>
-
-            </Grid>
-
-        </ScrollViewer>
+			BorderBrush="{x:Null}"/>
 
     </Grid>
 

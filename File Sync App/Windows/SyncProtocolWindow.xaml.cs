@@ -13,6 +13,8 @@ namespace File_Sync_App.Windows
     /// </summary>
     public partial class SyncProtocolWindow : Window
     {
+        public bool isValid { get; private set; } = false;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SyncProtocolWindow"/> class.
         /// </summary>
@@ -87,6 +89,8 @@ namespace File_Sync_App.Windows
             this.dpProtocols.SelectedDate = dateCounter.ToDateTime(new TimeOnly());
 
             #endregion existing logs
+
+            isValid = true;
         }
 
         #region listener

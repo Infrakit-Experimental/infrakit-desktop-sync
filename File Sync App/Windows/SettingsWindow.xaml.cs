@@ -380,6 +380,8 @@ namespace File_Sync_App.InputWindows
         {
             var syncProtocolWindow = new SyncProtocolWindow();
 
+            if (!syncProtocolWindow.isValid) return;
+
             syncProtocolWindow.ShowDialog();
         }
 

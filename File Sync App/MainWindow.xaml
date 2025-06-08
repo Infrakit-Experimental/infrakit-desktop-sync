@@ -7,7 +7,7 @@
     xmlns:local="clr-namespace:File_Sync_App"
     mc:Ignorable="d"
     Title="{DynamicResource main.title}"
-    Icon="/Resources/Icons/Logo.ico"
+    Icon="pack://application:,,,/Library;component/Resources/Icons/Logo.ico"
     Height="300"
     Width="500"
     MinHeight="200"
@@ -63,7 +63,7 @@
                 Grid.Column="0"
                 x:Name="btnChangeUser"
                 Content="{DynamicResource main.changeUser}"
-                Style="{StaticResource BaseButtonStyle}"
+                Style="{StaticResource IKSecondaryButton}"
                 Margin="5"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
@@ -73,16 +73,14 @@
             <Button
                 Grid.Column="1"
                 x:Name="btnSettings"
+                Style="{StaticResource IKSecondarySubtleIcon}"
                 Margin="5"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
-                Click="btnSettings_Click"
-                BorderBrush="{x:Null}"
-                Foreground="{x:Null}"
-                Background="{x:Null}">
+                Click="btnSettings_Click">
 
                 <Image
-                    Source="/Resources/Icons/Settings.ico"
+                    Source="pack://application:,,,/Library;component/Resources/Icons/Settings.ico"
                     Stretch="UniformToFill"/>
                 
             </Button>
@@ -117,7 +115,7 @@
                 x:Name="btnAddLink"
                 Margin="5"
                 Content="{DynamicResource main.addLink}"
-                Style="{StaticResource BaseButtonStyle}"
+                Style="{StaticResource IKSecondaryButton}"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
                 Click="btnAddLink_Click"/>
@@ -128,7 +126,7 @@
                 x:Name="btnEditLink"
                 Margin="5"
                 Content="{DynamicResource main.editLink}"
-                Style="{StaticResource BaseButtonStyle}"
+                Style="{StaticResource IKSecondaryButton}"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
                 IsEnabled="False"
@@ -140,7 +138,7 @@
                 x:Name="btnRemoveLink"
                 Margin="5"
                 Content="{DynamicResource main.removeLink}"
-                Style="{StaticResource BaseButtonStyle}"
+                Style="{StaticResource IKSecondaryButton}"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
                 IsEnabled="False"
@@ -244,11 +242,9 @@
             <!-- Rectangle border around the listbox. -->
             <Rectangle
                 Margin="5"
+                Style="{StaticResource BorderRectangle}"
                 HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
-                Stroke="#FFABADB3"
-                RadiusX="3"
-                RadiusY="3"/>
+                VerticalAlignment="Stretch"/>
 
         </Grid>
 
@@ -278,7 +274,7 @@
                 <Button
                     Grid.Column="0"
                     Content="{DynamicResource main.sync.manual.start}"
-                    Style="{StaticResource BaseButtonStyle}"
+                    Style="{StaticResource IKPrimaryButton}"
                     Margin="5"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
@@ -288,17 +284,15 @@
                 <Button
                     Grid.Column="1"
                     x:Name="btnSyncAutomatic"
+                    Style="{StaticResource IKSecondarySubtleIcon}"
                     ToolTip="{DynamicResource main.sync.automatic}"
                     Margin="5"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
-                    Click="btnSyncAutomatic_Click"
-                    BorderBrush="{x:Null}"
-                    Foreground="{x:Null}"
-                    Background="{x:Null}">
+                    Click="btnSyncAutomatic_Click">
 
                     <Image
-                        Source="/Resources/Icons/SyncAutomatic.ico"
+                        Source="/Resources/Icons/Sync.ico"
                         Margin="-3"
                         Stretch="Uniform"/>
 
@@ -341,17 +335,15 @@
                 <Button
                     Grid.Column="0"
                     x:Name="btnSyncManual"
+                    Style="{StaticResource IKSecondarySubtleIcon}"
                     ToolTip="{DynamicResource main.sync.manual}"
                     Margin="5"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
-                    Click="btnSyncManual_Click"
-                    BorderBrush="{x:Null}"
-                    Foreground="{x:Null}"
-                    Background="{x:Null}">
+                    Click="btnSyncManual_Click">
 
                     <Image
-                        Source="/Resources/Icons/SyncManual.ico"
+                        Source="/Resources/Icons/Sync-status.ico"
                         Margin="-3"
                         Stretch="Uniform"/>
 
@@ -513,7 +505,7 @@
                     <!-- Start automatic synchronization button. -->
                     <Button
                         x:Name="btnSyncAutoStart"
-                        Style="{StaticResource BaseButtonStyle}"
+                        Style="{StaticResource IKPrimaryButton}"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
                         Click="btnSyncAutoStart_Click">
@@ -527,7 +519,7 @@
                     <!-- Stop automatic synchronization button. -->
                     <Button
                         x:Name="btnSyncAutoStop"
-                        Style="{StaticResource BaseButtonStyle}"
+                        Style="{StaticResource IKPrimaryButton}"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
                         Visibility="Collapsed"
