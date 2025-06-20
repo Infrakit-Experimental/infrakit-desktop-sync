@@ -112,7 +112,6 @@
                         VerticalAlignment="Stretch"
                         SelectionChanged="cbLanguages_SelectionChanged">
 
-
                         <!-- ComboBox item for English. -->
                         <ComboBoxItem
                             x:Name="en"
@@ -122,6 +121,16 @@
                         <ComboBoxItem
                             x:Name="de"
                             Content="Deutsch"/>
+
+                        <!-- ComboBox item for Finnish. -->
+                        <ComboBoxItem
+                            x:Name="fi"
+                            Content="Suomi"/>
+
+                        <!-- ComboBox item for Polish. -->
+                        <ComboBoxItem
+                            x:Name="pl"
+                            Content="Polski"/>
 
                     </ComboBox>
 

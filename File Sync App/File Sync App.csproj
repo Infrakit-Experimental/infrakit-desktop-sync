@@ -62,10 +62,19 @@
 		<Page Update="Resources\Languages\English.xaml">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Page>
+		<Page Update="Resources\Languages\Finnish.xaml">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Page>
+		<Page Update="Resources\Languages\French.xaml">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Page>
 		<Page Update="Resources\Languages\German.xaml">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		  <SubType>Designer</SubType>
 		  <Generator>MSBuild:Compile</Generator>
+		</Page>
+		<Page Update="Resources\Languages\Polish.xaml">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Page>
 	</ItemGroup>
 
