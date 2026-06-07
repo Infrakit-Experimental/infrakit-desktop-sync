@@ -216,7 +216,6 @@ namespace File_Sync_App
             try
             {
                 Utils.Log.write("log.sync.start: \"" + this.name + "\"");
-                Settings.defaultFileSync = null;
 
                 Nodes.Log.Folder logRoot;
 

@@ -49,14 +49,12 @@
     <PackageReference Include="RestSharp" Version="112.1.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="Library">
-      <HintPath>..\..\infrakit-cs-library\Library\bin\Debug\net6.0-windows\Library.dll</HintPath>
-    </Reference>
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\infrakit-cs-library\Library\Library.csproj" />
+	</ItemGroup>
 
 	<ItemGroup>
-		<Page Update=".\..\infrakit-cs-library\Library\bin\Debug\net6.0-windows\Resources\Languages\German.xaml">
+		<Page Update=".\..\infrakit-cs-library\Library\Resources\Languages\German.xaml">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Page>
 		<Page Update="Resources\Languages\English.xaml">
