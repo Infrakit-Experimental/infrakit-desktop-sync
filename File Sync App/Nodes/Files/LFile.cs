@@ -22,7 +22,11 @@ namespace File_Sync_App.Nodes.Files
         public new string pos
         {
             get => base.pos;
-            set => base.pos = value;
+        }
+        public new string dir
+        {
+            get => base.dir;
+            set => base.dir = value;
         }
 
         /// <summary>
@@ -42,9 +46,9 @@ namespace File_Sync_App.Nodes.Files
         /// <param name="timestamp">The timestamp of the file.</param>
         /// <param name="isChecked">Whether the file is checked.</param>
         /// <param name="parent">The parent folder of the file.</param>
-        internal LFile(string pos, string content, DateTime? timestamp, bool? isChecked, Folder parent, DateTime? lastChanged = null) : base(content, timestamp, isChecked, parent)
+        internal LFile(string dir, string content, DateTime? timestamp, bool? isChecked, Folder parent, DateTime? lastChanged = null) : base(content, timestamp, isChecked, parent)
         {
-            this.pos = pos;
+            this.dir = dir;
 
             this.lastChanged = lastChanged;
         }
@@ -81,11 +85,11 @@ namespace File_Sync_App.Nodes.Files
 
             #endregion last changed
 
-            #region pos
+            #region dir
 
-            this.pos = System.IO.Path.Combine(parent.pos, content);
+            this.dir = parent.pos;
 
-            #endregion pos
+            #endregion dir
         }
 
         /// <summary>
@@ -126,7 +130,7 @@ namespace File_Sync_App.Nodes.Files
         /// <returns>A clone of the file.</returns>
         public LFile clone(LFolder parent)
         {
-            return new LFile(this.pos, this.content, this.timestamp, this.isChecked, parent, this.lastChanged);
+            return new LFile(this.dir, this.content, this.timestamp, this.isChecked, parent, this.lastChanged);
         }
 
         #region sync
@@ -274,8 +278,7 @@ namespace File_Sync_App.Nodes.Files
                     languages["links.syncFailed.noTarget.message"].ToString(),
                     languages["links.syncFailed.local.caption"].ToString(),
                     MessageBoxImage.Error,
-                    API.maxErrorDisplayTime,
-                    API.newErrorThread
+                    Utils.AutoClosingMessageBox.maxDisplayTime
                 );
 
                 return null;
@@ -289,12 +292,11 @@ namespace File_Sync_App.Nodes.Files
             {
                 if (!Settings.fileTypeErrorShown)
                 {
-                    var languages = Utils.Language.getRDict();
-                    MessageBox.Show(
+                    Utils.AutoClosingMessageBox.Show(
                         Utils.Language.getMessage("file.error.forbiddenType.message"),
                         LibraryUtils.getMessage("api.document.getUploudURL"),
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error
+                        MessageBoxImage.Error,
+                        Utils.AutoClosingMessageBox.maxDisplayTime
                     );
 
                     Settings.fileTypeErrorShown = true;
@@ -329,8 +331,6 @@ namespace File_Sync_App.Nodes.Files
             }
 
             Utils.Log.write("sync.successful.local.file: \"" + this.content + "\"");
-
-            if (result.Value.status != API.Document.Status.Successful) return (false, null);
 
             return (true, result.Value.doc);
         }

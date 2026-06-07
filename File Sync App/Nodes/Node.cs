@@ -29,11 +29,29 @@ namespace File_Sync_App.Nodes
         /// </summary>
         internal int depth;
 
+        internal dynamic pos
+        {
+            get
+            {
+                if (this.dir is Guid g)
+                {
+                    return g;
+                }
+
+                if (this.dir is string s)
+                {
+                    return System.IO.Path.Combine(s, this.content);
+                }
+
+                throw new InvalidOperationException($"Node.dir has unsupported type '{this.dir?.GetType().FullName ?? "null"}'. Expected Guid or string.");
+            }
+        }
+
         /// <summary>
-        /// The position of the node.
+        /// The directory of the node.
         /// </summary>
         /// <value>path or uuid</value>
-        internal dynamic pos { get; set; }
+        internal dynamic dir { get; set; }
 
         #endregion variables
 
@@ -51,11 +69,11 @@ namespace File_Sync_App.Nodes
 
             if (parent is null)
             {
-                depth = 0;
+                this.depth = 0;
             }
             else
             {
-                depth = parent.depth + 1;
+                this.depth = parent.depth + 1;
                 this.parent = parent;
             }
 
@@ -80,7 +98,7 @@ namespace File_Sync_App.Nodes
             var nameNode = xmlNode.Attributes["name"];
             if (nameNode is not null)
             {
-                content = nameNode.Value;
+                this.content = nameNode.Value;
             }
 
             #endregion name
@@ -92,7 +110,7 @@ namespace File_Sync_App.Nodes
             {
                 var isCheckedString = isCheckedNode.Value;
 
-                isChecked = null;
+                this.isChecked = null;
                 if (!isCheckedString.Equals("Null"))
                 {
                     isChecked = Convert.ToBoolean(isCheckedString);
@@ -105,11 +123,11 @@ namespace File_Sync_App.Nodes
 
             if (parent is null)
             {
-                depth = 0;
+                this.depth = 0;
             }
             else
             {
-                depth = parent.depth + 1;
+                this.depth = parent.depth + 1;
                 this.parent = parent;
             }
 
@@ -129,7 +147,7 @@ namespace File_Sync_App.Nodes
             #region name
 
             var name = doc.CreateAttribute("name");
-            name.Value = content;
+            name.Value = this.content;
             node.Attributes.Append(name);
 
             #endregion name
@@ -137,9 +155,9 @@ namespace File_Sync_App.Nodes
             #region is checked
 
             var isCheckedNode = doc.CreateAttribute("isChecked");
-            if (isChecked.HasValue)
+            if (this.isChecked.HasValue)
             {
-                isCheckedNode.Value = isChecked.Value.ToString();
+                isCheckedNode.Value = this.isChecked.Value.ToString();
             }
             else
             {

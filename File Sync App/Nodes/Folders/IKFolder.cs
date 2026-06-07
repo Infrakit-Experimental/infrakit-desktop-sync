@@ -21,7 +21,11 @@ namespace File_Sync_App.Nodes.Folders
         public new Guid pos
         {
             get => base.pos;
-            set => base.pos = value;
+        }
+        public new Guid dir
+        {
+            get => base.dir;
+            set => base.dir = value;
         }
 
         #endregion variables
@@ -36,7 +40,7 @@ namespace File_Sync_App.Nodes.Folders
         /// <param name="parent">The parent folder.</param>
         public IKFolder(Library.Models.Folder metaData, List<Library.Models.Folder> folderStructure, Folder? parent = null) : base(metaData.name, false, parent, false)
         {
-            this.pos = metaData.uuid;
+            this.dir = metaData.uuid;
 
             #region get child folders
 
@@ -68,7 +72,7 @@ namespace File_Sync_App.Nodes.Folders
         /// <param name="isDeleted">A boolean indicating whether the folder is deleted. The default value is false.</param>
         internal IKFolder(Guid pos, string content, bool? isChecked, Folder? parent, bool isDeleted = false) : base(content, isChecked, parent, isDeleted)
         {
-            this.pos = pos;
+            this.dir = pos;
         }
 
         #endregion constructors
@@ -85,15 +89,15 @@ namespace File_Sync_App.Nodes.Folders
         {
             if (xmlNode.Attributes is not null)
             {
-                #region pos
+                #region uuid
 
                 var uuidNode = xmlNode.Attributes["uuid"];
                 if (uuidNode is not null)
                 {
-                    pos = new Guid(uuidNode.Value);
+                    this.dir = new Guid(uuidNode.Value);
                 }
 
-                #endregion pos
+                #endregion uuid
             }
 
             #region children
@@ -129,7 +133,7 @@ namespace File_Sync_App.Nodes.Folders
             #region uuid
 
             var uuid = doc.CreateAttribute("uuid");
-            uuid.Value = pos.ToString();
+            uuid.Value = this.dir.ToString();
             node.Attributes.Append(uuid);
 
             #endregion uuid
@@ -146,7 +150,7 @@ namespace File_Sync_App.Nodes.Folders
         /// <returns>A new IKFolder object that is a clone of this object.</returns>
         public IKFolder clone(IKFolder? parent = null)
         {
-            var folder = new IKFolder(this.pos, this.content, this.isChecked, parent, this.isDeleted);
+            var folder = new IKFolder(this.dir, this.content, this.isChecked, parent, this.isDeleted);
 
             foreach (var child in children)
             {
@@ -397,7 +401,7 @@ namespace File_Sync_App.Nodes.Folders
                 isChecked = lParent.isChecked.Value;
             }
 
-            var newLFolder = new LFolder(target, this.content, isChecked, lParent, this.isDeleted);
+            var newLFolder = new LFolder(lParent.pos, this.content, isChecked, lParent, this.isDeleted);
             lParent.children.Add(newLFolder);
 
             #endregion new folder
@@ -605,7 +609,7 @@ namespace File_Sync_App.Nodes.Folders
                     {
                         existingFile.timestamp = file.timestamp;
                         existingFile.version = file.version;
-                        existingFile.pos = file.uuid;
+                        existingFile.dir = file.uuid;
                         continue;
                     }
 
@@ -748,7 +752,7 @@ namespace File_Sync_App.Nodes.Folders
                         {
                             file.timestamp = doc.timestamp;
                             file.version = doc.version;
-                            file.pos = doc.uuid;
+                            file.dir = doc.uuid;
 
                             files.Remove(doc);
 

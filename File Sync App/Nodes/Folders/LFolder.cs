@@ -21,7 +21,11 @@ namespace File_Sync_App.Nodes.Folders
         public new string pos
         {
             get => base.pos;
-            set => base.pos = value;
+        }
+        public new string dir
+        {
+            get => base.dir;
+            set => base.dir = value;
         }
 
         #endregion variables
@@ -35,9 +39,9 @@ namespace File_Sync_App.Nodes.Folders
         /// <param name="rootPath">The root path of the folder structure.</param>
         /// <param name="structure">The folder structure.</param>
         /// <param name="parent">The parent folder, or null if this is the root folder.</param>
-        public LFolder(string name, string rootPath, List<string> structure, Folder? parent = null) : base(name, false, parent, false)
+        public LFolder(string name, string rootDir, List<string> structure, Folder? parent = null) : base(name, false, parent, false)
         {
-            pos = rootPath;
+            this.dir = rootDir;
 
             #region get child folders
 
@@ -45,9 +49,9 @@ namespace File_Sync_App.Nodes.Folders
 
             foreach (var s in structure)
             {
-                if (s.StartsWith(rootPath + "\\"))
+                if (s.StartsWith(this.pos + "\\"))
                 {
-                    var element = s.Replace(rootPath + "\\", "");
+                    var element = s.Replace(this.pos + "\\", "");
 
                     if (!element.Contains("\\"))
                     {
@@ -60,17 +64,17 @@ namespace File_Sync_App.Nodes.Folders
 
             foreach (var child in childrenList)
             {
-                var path = rootPath + "\\" + child;
-
                 if (child.Contains("."))
                 {
+                    var path = this.pos + "\\" + child;
+
                     DateTime timestamp = System.IO.File.GetLastWriteTimeUtc(path);
 
-                    children.Add(new LFile(path, child, timestamp, false, this));
+                    children.Add(new LFile(this.pos, child, timestamp, false, this));
                 }
                 else
                 {
-                    children.Add(new LFolder(child, path, structure, this));
+                    children.Add(new LFolder(child, this.pos, structure, this));
                 }
             }
         }
@@ -83,9 +87,9 @@ namespace File_Sync_App.Nodes.Folders
         /// <param name="isChecked">A boolean indicating whether the folder is checked.</param>
         /// <param name="parent">The parent folder of the current folder.</param>
         /// <param name="isDeleted">A boolean indicating whether the folder is deleted.</param>
-        internal LFolder(string pos, string content, bool? isChecked, Folder? parent, bool isDeleted) : base(content, isChecked, parent, isDeleted)
+        internal LFolder(string dir, string content, bool? isChecked, Folder? parent, bool isDeleted) : base(content, isChecked, parent, isDeleted)
         {
-            this.pos = pos;
+            this.dir = dir;
         }
 
         #endregion constructors
@@ -99,25 +103,25 @@ namespace File_Sync_App.Nodes.Folders
         /// <param name="parent">The parent folder, or null if this is the root folder.</param>
         internal LFolder(XmlNode xmlNode, Folder? parent = null) : base(xmlNode, parent)
         {
-            #region pos
+            #region dir
 
             if (parent is null)
             {
                 if (xmlNode.Attributes is not null)
                 {
-                    var pathNode = xmlNode.Attributes["path"];
-                    if (pathNode is not null)
+                    var dirNode = xmlNode.Attributes["dir"];
+                    if (dirNode is not null)
                     {
-                        pos = pathNode.Value;
+                        this.dir = dirNode.Value;
                     }
                 }
             }
             else
             {
-                pos = Path.Combine(parent.pos, content);
+                this.dir = parent.pos;
             }
 
-            #endregion pos
+            #endregion dir
 
             #region children
 
@@ -149,16 +153,16 @@ namespace File_Sync_App.Nodes.Folders
         {
             var node = base.getXmlNode(doc);
 
-            #region path
+            #region dir
 
-            if (parent is null)
+            if (this.parent is null)
             {
-                var path = doc.CreateAttribute("path");
-                path.Value = pos;
-                node.Attributes.Append(path);
+                var dir = doc.CreateAttribute("dir");
+                dir.Value = this.dir;
+                node.Attributes.Append(dir);
             }
 
-            #endregion path
+            #endregion dir
 
             return node;
         }
@@ -172,7 +176,7 @@ namespace File_Sync_App.Nodes.Folders
         /// <returns>A clone of the folder and its child nodes.</returns>
         public LFolder clone(LFolder? parent = null)
         {
-            var folder = new LFolder(this.pos, this.content, this.isChecked, parent, this.isDeleted);
+            var folder = new LFolder(this.dir, this.content, this.isChecked, parent, this.isDeleted);
 
             foreach (var child in children)
             {
@@ -565,7 +569,8 @@ namespace File_Sync_App.Nodes.Folders
                 var name = Path.GetFileName(path);
                 if (exists(name, true)) continue;
 
-                children.Add(new LFolder(path, name, this.isChecked, this, this.isDeleted));
+                var dir = Path.GetDirectoryName(path);
+                children.Add(new LFolder(dir, name, this.isChecked, this, this.isDeleted));
             }
 
             #endregion add new folders
@@ -591,13 +596,14 @@ namespace File_Sync_App.Nodes.Folders
             foreach (var path in files)
             {
                 var name = Path.GetFileName(path);
+                var dir = Path.GetDirectoryName(path);
 
                 var file = this.get(name, false);
 
                 if (file is not null) continue;
 
                 DateTime timestamp = System.IO.File.GetLastWriteTimeUtc(path);
-                children.Add(new LFile(path, name, timestamp, isChecked, this));
+                children.Add(new LFile(dir, name, timestamp, isChecked, this));
             }
 
             #endregion add new files
@@ -667,7 +673,8 @@ namespace File_Sync_App.Nodes.Folders
                 var name = Path.GetFileName(path);
                 if (exists(name, true)) continue;
 
-                var newFolder = new LFolder(path, name, this.isChecked, this, this.isDeleted);
+                var dir = Path.GetDirectoryName(path);
+                var newFolder = new LFolder(dir, name, this.isChecked, this, this.isDeleted);
 
                 if (updateAll || isChecked)
                 {
@@ -700,6 +707,7 @@ namespace File_Sync_App.Nodes.Folders
             foreach (var path in files)
             {
                 var name = Path.GetFileName(path);
+                var dir = Path.GetDirectoryName(path);
 
                 DateTime timestamp = System.IO.File.GetLastWriteTimeUtc(path);
 
@@ -711,7 +719,7 @@ namespace File_Sync_App.Nodes.Folders
                     continue;
                 }
 
-                children.Add(new LFile(path, name, timestamp, isChecked, this));
+                children.Add(new LFile(dir, name, timestamp, isChecked, this));
             }
 
             #endregion update & add new files

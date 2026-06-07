@@ -2,6 +2,7 @@
 using Library;
 using System;
 using System.IO;
+using System.Runtime;
 using System.Text;
 using System.Windows;
 using System.Xml;
@@ -21,7 +22,11 @@ namespace File_Sync_App.Nodes.Files
         public new Guid pos
         {
             get => base.pos;
-            set => base.pos = value;
+        }
+        public new Guid dir
+        {
+            get => base.dir;
+            set => base.dir = value;
         }
 
         /// <summary>
@@ -49,7 +54,7 @@ namespace File_Sync_App.Nodes.Files
         /// <param name="parent">The parent folder of the file.</param>
         internal IKFile(Guid pos, string content, DateTime? timestamp, int? version, bool? isChecked, Folder parent, int? lastVersion = null) : base(content, timestamp, isChecked, parent)
         {
-            this.pos = pos;
+            this.dir = pos;
             this.version = version;
 
             this.lastVersion = lastVersion;
@@ -84,15 +89,15 @@ namespace File_Sync_App.Nodes.Files
 
             #endregion last version
 
-            #region pos
+            #region uuid
 
             var uuidNode = xmlNode.Attributes["uuid"];
             if (uuidNode is not null)
             {
-                pos = new Guid(uuidNode.Value);
+                this.dir = new Guid(uuidNode.Value);
             }
 
-            #endregion pos
+            #endregion uuid
         }
 
         /// <summary>
@@ -124,7 +129,7 @@ namespace File_Sync_App.Nodes.Files
             #region uuid
 
             var uuid = doc.CreateAttribute("uuid");
-            uuid.Value = pos.ToString();
+            uuid.Value = this.dir.ToString();
             node.Attributes.Append(uuid);
 
             #endregion uuid
@@ -168,15 +173,20 @@ namespace File_Sync_App.Nodes.Files
         /// <returns>A Log.File object representing the sync status of the file.</returns>
         internal Log.File create(LFolder lParent)
         {
-            var target = Path.Combine(lParent.pos, this.content);
+            var targetDir = lParent.pos;
 
             #region create
 
-            var result = this.download(target, this.content);
+            var result = this.download(targetDir, this.content);
 
-            if (!result.HasValue || !result.Value.status)
+            if (!result.HasValue)
             {
-                return new Log.File(content, Log.SyncStatus.NotSynced, Log.SyncStatus.Error);
+                return new Log.File(this.content, Log.SyncStatus.NotSynced, Log.SyncStatus.Error);
+            }
+
+            if (!result.Value.status)
+            {
+                return new Log.File(result.Value.fileName, Log.SyncStatus.NotSynced, Log.SyncStatus.Error);
             }
 
             #endregion create
@@ -189,7 +199,7 @@ namespace File_Sync_App.Nodes.Files
                 isChecked = lParent.isChecked.Value;
             }
 
-            var lFile = new LFile(target, this.content, result.Value.timestamp, isChecked, lParent);
+            var lFile = new LFile(targetDir, this.content, result.Value.timestamp, isChecked, lParent);
             lParent.children.Add(lFile);
 
             #endregion new file
@@ -250,7 +260,7 @@ namespace File_Sync_App.Nodes.Files
         /// <returns>A Log.File object representing the sync status of the file.</returns>
         internal Log.File download(LFile local)
         {
-            var result = this.download(local.pos, local.content);
+            var result = this.download(local.dir, local.content);
 
             if (!result.HasValue)
             {
@@ -281,9 +291,9 @@ namespace File_Sync_App.Nodes.Files
         /// a DateTime? indicating the last write time of the downloaded file,
         /// or null if the download failed.
         /// </returns>
-        private (bool status, DateTime? timestamp)? download(string? target, string? targetFileName)
+        private (bool status, DateTime? timestamp, string fileName)? download(string? targetDir, string? targetFileName)
         {
-            if (target is null || targetFileName is null)
+            if (targetDir is null || targetFileName is null)
             {
                 var languages = Utils.Language.getRDict();
 
@@ -292,14 +302,21 @@ namespace File_Sync_App.Nodes.Files
                     languages["links.syncFailed.noTarget.message"].ToString(),
                     languages["links.syncFailed.infrakit.caption"].ToString(),
                     MessageBoxImage.Error,
-                    API.maxErrorDisplayTime,
-                    API.newErrorThread
+                    Utils.AutoClosingMessageBox.maxDisplayTime
                 );
 
                 return null;
             }
 
-            var result = API.Document.download(this.pos, target, targetFileName);
+            var checkedFileName = API.Document.checkFileName(targetFileName);
+
+            if (checkedFileName != null)
+            {
+                targetFileName = checkedFileName;
+                API.Document.changeFileName(this.pos, targetFileName);
+            }
+
+            var result = API.Document.download(this.pos, targetDir, targetFileName);
 
             if (!result.HasValue || result.Value.status != API.Document.Status.Successful)
             {
@@ -317,9 +334,11 @@ namespace File_Sync_App.Nodes.Files
 
             Utils.Log.write("sync.successful.infrakit.file: \"" + this.content + "\"");
 
-            if (result.Value.status != API.Document.Status.Successful) return (false, null);
+            if (result.Value.status != API.Document.Status.Successful) return (false, null, targetFileName);
 
-            return (true, System.IO.File.GetLastWriteTimeUtc(target));
+            string targetPath = Path.Combine(targetDir, targetFileName);
+
+            return (true, System.IO.File.GetLastWriteTimeUtc(targetPath), targetFileName);
         }
 
         #endregion download
