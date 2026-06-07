@@ -48,29 +48,17 @@
 
                 <Grid.RowDefinitions>
 
-                    <RowDefinition
-                            Height="auto"/>
-
-                    <RowDefinition
-                            Height="auto"/>
-
-                    <RowDefinition
-                            Height="auto"/>
-
-                    <RowDefinition
-                            Height="auto"/>
-
-                    <RowDefinition
-                            Height="auto"/>
-
-                    <RowDefinition
-                            Height="auto"/>
-
-                    <RowDefinition
-                            Height="auto"/>
-
-                    <RowDefinition
-                            Height="*"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>                    
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    
+                    <RowDefinition Height="*"/>
 
                 </Grid.RowDefinitions>
 
@@ -259,10 +247,97 @@
 
                 <!--#endregion select file by default-->
 
-                <!--#region log-->
+                <!--#region Max error display time-->
 
                 <Grid
                     Grid.Row="3">
+
+                    <!--#region structure definitions-->
+
+                    <Grid.RowDefinitions>
+
+                        <RowDefinition
+                            Height="28"/>
+
+                        <RowDefinition
+                            Height="25"/>
+
+                        <RowDefinition
+                            Height="20"/>
+
+                    </Grid.RowDefinitions>
+
+                    <!--#endregion structure definitions-->
+
+                    <!-- TextBlock to display the automatic document download label. -->
+                    <TextBlock
+                        Grid.Row="0"
+                        Text="{DynamicResource settings.maxErrorDisplayTime}"
+                        Margin="0,5"
+                        ToolTip="{DynamicResource settings.maxErrorDisplayTime}"
+                        TextTrimming="CharacterEllipsis"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"/>
+
+                    <!-- Slider to select the number of documents from which the query should be made.. -->
+                    <Slider
+                        Grid.Row="1"
+                        x:Name="slMaxErrorDisplayTime"
+                        Margin="0,0,0,5"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Top"
+                        Minimum="0"
+                        Maximum="300"
+                        IsSnapToTickEnabled="True"
+                        TickFrequency="1"
+                        AutoToolTipPlacement="TopLeft"
+                        AutoToolTipPrecision="0"/>
+
+                    <!-- CheckBox to select whether to automatically download all documents. -->
+                    <CheckBox
+                        Grid.Row="2"
+                        x:Name="cbMaxErrorDisplayTime"
+                        Content="{DynamicResource settings.maxErrorDisplayTimeNone}"
+                        Margin="0,0,0,5"
+                        VerticalAlignment="Top"
+                        Checked="cbMaxErrorDisplayTime_Checked"
+                        Unchecked="cbMaxErrorDisplayTime_Unchecked"/>
+
+                </Grid>
+
+                <!--#endregion Max error display time-->
+
+                <!--#region Invalid characters-->
+
+                <Grid
+                    Grid.Row="4">
+
+                    <!--#region structure definitions-->
+
+                    <Grid.RowDefinitions>
+
+                        <RowDefinition
+                            Height="25"/>
+
+                    </Grid.RowDefinitions>
+
+                    <!--#endregion structure definitions-->
+
+                    <!-- CheckBox to enable or disable file deletion. -->
+                    <CheckBox
+                        Grid.Row="0"
+                        x:Name="cbInvalidChars"
+                        Margin="0,5"
+                        Content="{DynamicResource settings.invalidChars}"/>
+
+                </Grid>
+
+                <!--#endregion Invalid characters-->
+
+                <!--#region log-->
+
+                <Grid
+                    Grid.Row="5">
 
                     <!--#region structure definitions-->
 
@@ -335,7 +410,7 @@
                 <!--#region syncLog-->
 
                 <Grid
-                    Grid.Row="4">
+                    Grid.Row="6">
 
                     <!--#region structure definitions-->
 
@@ -408,7 +483,7 @@
                 <!--#region delete files-->
 
                 <Grid
-                    Grid.Row="5">
+                    Grid.Row="7">
 
                     <!--#region structure definitions-->
 
@@ -448,7 +523,7 @@
                 <!--#region change API environment-->
 
                 <Grid
-                    Grid.Row="6">
+                    Grid.Row="8">
 
                     <!--#region structure definitions-->
 

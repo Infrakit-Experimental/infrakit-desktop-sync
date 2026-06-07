@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using System.Xml;
 using static Library.Utils;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace File_Sync_App
 {
@@ -55,7 +56,7 @@ namespace File_Sync_App
 
             try
             {
-                var defaultFileSyncIdx = Int32.Parse(Utils.Settings.get("defaultFileSync"));
+                var defaultFileSyncIdx = int.Parse(Utils.Settings.get("defaultFileSync"));
 
                 Settings.setDefaultFileSyncByIdx(defaultFileSyncIdx);
             }
@@ -69,6 +70,70 @@ namespace File_Sync_App
             }
 
             #endregion default file sync
+
+            // Get the max error display time setting.
+            #region maxErrorDisplayTime
+
+            bool maxErrorDisplayTime = true;
+            try
+            {
+                maxErrorDisplayTime = bool.Parse(Utils.Settings.get("maxErrorDisplayTime"));
+            }
+            catch (Exception ex)
+            {
+                Log.write("settings.error.loading.maxErrorDisplayTime: " + ex.GetType() + " | " + ex.Message);
+
+                Utils.Settings.@override("maxErrorDisplayTime", "False");
+
+                Settings.showLoadingError();
+            }
+
+            int maxErrorDisplayTimeInMinutes = int.MaxValue;
+
+            if (maxErrorDisplayTime)
+            {
+                try
+                {
+                    maxErrorDisplayTimeInMinutes = int.Parse(Utils.Settings.getAttribute("maxErrorDisplayTime", "duration"));
+                }
+                catch (Exception ex)
+                {
+                    Log.write("settings.error.loading.maxErrorDisplayTime.duration: " + ex.GetType() + " | " + ex.Message);
+
+                    Utils.Settings.@override("maxErrorDisplayTime", "False");
+                    maxErrorDisplayTime = false;
+
+                    Settings.showLoadingError();
+                }
+            }
+
+            if (maxErrorDisplayTime)
+            {
+                Utils.AutoClosingMessageBox.maxDisplayTime = new TimeSpan(0, maxErrorDisplayTimeInMinutes, 0);
+            }
+            else
+            {
+                Utils.AutoClosingMessageBox.maxDisplayTime = null;
+            }
+
+            #endregion maxErrorDisplayTime
+
+            #region invalid files
+
+            try
+            {
+                Settings.handleInvalidFiles = bool.Parse(Utils.Settings.get("handleInvalidFiles"));
+            }
+            catch (Exception ex)
+            {
+                Log.write("main.error.loading.handleInvalidFiles: " + ex.GetType() + " | " + ex.Message);
+
+                Utils.Settings.@override("handleInvalidFiles", "False");
+
+                Settings.showLoadingError();
+            }
+
+            #endregion invalid files
 
             // Get the delete folders and files flag from the settings.
             #region delete folders & files
@@ -401,8 +466,6 @@ namespace File_Sync_App
         {
             this.gdSyncAutomatic.Visibility = Visibility.Collapsed;
             this.gdSyncManual.Visibility = Visibility.Visible;
-
-            API.maxErrorDisplayTime = new TimeSpan(0, 15, 0);
         }
 
         /// <summary>
@@ -426,11 +489,11 @@ namespace File_Sync_App
 
                 var languages = Utils.Language.getRDict();
 
-                MessageBox.Show(
+                Utils.AutoClosingMessageBox.Show(
                     languages["sync.linksSynced.message"].ToString(),
                     languages["sync.linksSynced.caption"].ToString(),
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information
+                    MessageBoxImage.Information,
+                    Utils.AutoClosingMessageBox.maxDisplayTime
                 );
 
                 #endregion success message
@@ -510,8 +573,6 @@ namespace File_Sync_App
 
             #endregion disable functions
 
-            API.maxErrorDisplayTime = timeSpan.Value - TimeSpan.FromSeconds(5);
-
             #region setup BackgroundWorker
 
             this.bwAutoSync = new();
@@ -542,8 +603,6 @@ namespace File_Sync_App
             Utils.Log.write("log.sync.automatic.end");
 
             Utils.Settings.set("autoSync", "False");
-
-            API.maxErrorDisplayTime = new TimeSpan(0, 15, 0);
 
             #region enable functions
 
@@ -606,11 +665,11 @@ namespace File_Sync_App
 
             var languages = Utils.Language.getRDict();
 
-            MessageBox.Show(
+            Utils.AutoClosingMessageBox.Show(
                 languages["main.time.hours"].ToString(),
                 languages["main.time.caption"].ToString(),
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning
+                MessageBoxImage.Warning,
+                Utils.AutoClosingMessageBox.maxDisplayTime
             );
 
             this.tbTimeHours.Text = "23";
@@ -629,11 +688,11 @@ namespace File_Sync_App
             
             var languages = Utils.Language.getRDict();
 
-            MessageBox.Show(
+            Utils.AutoClosingMessageBox.Show(
                 languages["main.time.minutes"].ToString(),
                 languages["main.time.caption"].ToString(),
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning
+                MessageBoxImage.Warning,
+                Utils.AutoClosingMessageBox.maxDisplayTime
             );
 
             this.tbTimeMinutes.Text = "59";
@@ -728,6 +787,8 @@ namespace File_Sync_App
             try
             {
                 autoSync = bool.Parse(Utils.Settings.get("autoSync"));
+
+                if (!autoSync) return;
             }
             catch (Exception ex)
             {
@@ -740,78 +801,75 @@ namespace File_Sync_App
                 return;
             }
 
-            if (autoSync)
+            var languages = Utils.Language.getRDict();
+
+            var result = MessageBox.Show(
+                languages["main.startAutoSync.message"].ToString(),
+                languages["main.startAutoSync.caption"].ToString(),
+                MessageBoxButton.YesNoCancel,
+                MessageBoxImage.Question
+            );
+
+            if (result == MessageBoxResult.Cancel) return;
+
+            this.btnSyncAutomatic.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+
+            var type = "";
+            var timeString = "";
+
+            try
             {
-                var languages = Utils.Language.getRDict();
+                type = Utils.Settings.getAttribute("autoSync", "Type");
+                timeString = Utils.Settings.getAttribute("autoSync", "Time");
+            }
+            catch (Exception ex)
+            {
+                Log.write("main.error.loading.autoSync.attributes: " + ex.GetType() + " | " + ex.Message);
 
-                var result = MessageBox.Show(
-                    languages["main.startAutoSync.message"].ToString(),
-                    languages["main.startAutoSync.caption"].ToString(),
-                    MessageBoxButton.YesNoCancel,
-                    MessageBoxImage.Question
-                );
+                Utils.Settings.@override("autoSync", "False");
 
-                if (result == MessageBoxResult.Cancel) return;
+                Settings.showLoadingError();
 
-                this.btnSyncAutomatic.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+                return;
+            }
 
-                var type = "";
-                var timeString = "";
+            var time = TimeSpan.Parse(timeString);
+            switch (type)
+            {
+                case "Minutes":
+                    this.cbTime.SelectedIndex = 0;
+                    this.tbTime.Text = ((int)time.TotalMinutes).ToString();
+                    break;
 
-                try
-                {
-                    type = Utils.Settings.getAttribute("autoSync", "Type");
-                    timeString = Utils.Settings.getAttribute("autoSync", "Time");
-                }
-                catch (Exception ex)
-                {
-                    Log.write("main.error.loading.autoSync.attributes: " + ex.GetType() + " | " + ex.Message);
+                case "Hours":
+                    this.cbTime.SelectedIndex = 1;
+                    this.tbTime.Text = ((int)time.TotalHours).ToString();
+                    break;
 
-                    Utils.Settings.@override("autoSync", "False");
+                case "Days":
+                    this.cbTime.SelectedIndex = 2;
+                    this.tbTime.Text = ((int)time.TotalDays).ToString();
+                    break;
 
-                    Settings.showLoadingError();
+                case "Fixed":
+                    this.cbTime.SelectedIndex = 3;
 
-                    return;
-                }
+                    this.tbTimeHours.Text = time.Hours.ToString();
 
-                var time = TimeSpan.Parse(timeString);
-                switch (type)
-                {
-                    case "Minutes":
-                        this.cbTime.SelectedIndex = 0;
-                        this.tbTime.Text = ((int)time.TotalMinutes).ToString();
-                        break;
+                    var min = time.Minutes;
+                    this.tbTimeMinutes.Text = min.ToString();
 
-                    case "Hours":
-                        this.cbTime.SelectedIndex = 1;
-                        this.tbTime.Text = ((int)time.TotalHours).ToString();
-                        break;
+                    if (min < 10)
+                    {
+                        this.tbTimeMinutes.Text = "0" + this.tbTimeMinutes.Text;
+                    }
 
-                    case "Days":
-                        this.cbTime.SelectedIndex = 2;
-                        this.tbTime.Text = ((int)time.TotalDays).ToString();
-                        break;
+                    break;
+            }
 
-                    case "Fixed":
-                        this.cbTime.SelectedIndex = 3;
-
-                        this.tbTimeHours.Text = time.Hours.ToString();
-
-                        var min = time.Minutes;
-                        this.tbTimeMinutes.Text = min.ToString();
-
-                        if (min < 10)
-                        {
-                            this.tbTimeMinutes.Text = "0" + this.tbTimeMinutes.Text;
-                        }
-
-                        break;
-                }
-
-                if (result == MessageBoxResult.Yes)
-                {
-                    this.btnSyncAutoStart.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
-                }
+            if (result == MessageBoxResult.Yes)
+            {
+                this.btnSyncAutoStart.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
             }
         }
 
@@ -839,13 +897,12 @@ namespace File_Sync_App
             if (links.Count == 0)
             {
                 Utils.Log.write("main.noActiveLinks");
-                MessageBox.Show(
+                Utils.AutoClosingMessageBox.Show(
                     languages["main.noActiveLinks.message"].ToString(),
                     languages["main.noActiveLinks.caption"].ToString(),
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information
+                    MessageBoxImage.Information,
+                    Utils.AutoClosingMessageBox.maxDisplayTime
                 );
-
                 return null;
             }
 
@@ -1050,11 +1107,11 @@ namespace File_Sync_App
 
             if (links is null) return;
 
-            API.newErrorThread = true;
+            Utils.AutoClosingMessageBox.newThread = true;
 
             this.sync(links, true);
 
-            API.newErrorThread = false;
+            Utils.AutoClosingMessageBox.newThread = false;
         }
 
         #endregion automatic
@@ -1095,11 +1152,11 @@ namespace File_Sync_App
 
             var languages = Utils.Language.getRDict();
 
-            MessageBox.Show(
-                languages["main.time.error"].ToString(),
+            Utils.AutoClosingMessageBox.Show(
+                languages["main.time.message"].ToString(),
                 languages["main.time.caption"].ToString(),
-                MessageBoxButton.OK,
-                MessageBoxImage.Error
+                MessageBoxImage.Error,
+                Utils.AutoClosingMessageBox.maxDisplayTime
             );
         }
     }

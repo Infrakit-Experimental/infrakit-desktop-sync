@@ -101,11 +101,11 @@ namespace File_Sync_App.Windows
         /// <param name="e">The event arguments.</param>
         private void btnFile_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(
+            Utils.AutoClosingMessageBox.Show(
                 this.local.pos,
                 Utils.Language.getMessage("selectFile.path"),
-                MessageBoxButton.OK,
-                MessageBoxImage.Information
+                MessageBoxImage.Information,
+                Utils.AutoClosingMessageBox.maxDisplayTime
             );
         }
 

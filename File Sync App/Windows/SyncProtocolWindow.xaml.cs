@@ -41,11 +41,11 @@ namespace File_Sync_App.Windows
             {
                 var languages = Utils.Language.getRDict();
 
-                MessageBox.Show(
+                Utils.AutoClosingMessageBox.Show(
                     languages["logs.noLogs.message"].ToString(),
                     languages["logs.protocols.caption"].ToString(),
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information
+                    MessageBoxImage.Information,
+                    Utils.AutoClosingMessageBox.maxDisplayTime
                 );
 
                 return;
@@ -116,11 +116,11 @@ namespace File_Sync_App.Windows
             {
                 var languages = Utils.Language.getRDict();
 
-                MessageBox.Show(
+                Utils.AutoClosingMessageBox.Show(
                     languages["logs.notValid.message"].ToString(),
                     languages["logs.protocols.caption"].ToString(),
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error
+                    MessageBoxImage.Error,
+                    Utils.AutoClosingMessageBox.maxDisplayTime
                 );
 
                 this.dpProtocols.SelectedDate = null;

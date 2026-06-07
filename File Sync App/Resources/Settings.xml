@@ -6,4 +6,6 @@
 	<deleteFoldersAndFiles>False</deleteFoldersAndFiles>
 	<autoSync>False</autoSync>
 	<defaultFileSync>0</defaultFileSync>
+	<maxErrorDisplayTime>False</maxErrorDisplayTime>
+	<handleInvalidFiles>False</handleInvalidFiles>
 </body>

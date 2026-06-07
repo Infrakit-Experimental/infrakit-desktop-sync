@@ -209,17 +209,19 @@ namespace File_Sync_App
 
             try
             {
-                var root = Path.GetFileName(fBD.SelectedPath);
+                var rootPath = fBD.SelectedPath;
+                var rootName = Path.GetFileName(rootPath);
+                var rootDir = Path.GetDirectoryName(rootPath);
 
-                var folders = Directory.GetDirectories(fBD.SelectedPath, "*", SearchOption.AllDirectories);
-                var files = Directory.GetFiles(fBD.SelectedPath, "*", SearchOption.AllDirectories);
+                var folders = Directory.GetDirectories(rootPath, "*", SearchOption.AllDirectories);
+                var files = Directory.GetFiles(rootPath, "*", SearchOption.AllDirectories);
 
                 List<string> folderStructure = new();
                 folderStructure.AddRange(folders);
                 folderStructure.AddRange(files);
 
                 this.localData.Clear();
-                this.localData.Add(new LFolder(root, fBD.SelectedPath, folderStructure));
+                this.localData.Add(new LFolder(rootName, rootDir, folderStructure));
 
                 this.tvLocalData.Items.Refresh();
 
@@ -239,11 +241,11 @@ namespace File_Sync_App
 
                 var languages = Utils.Language.getRDict();
                 Utils.Log.write("link.getLocalFileError: " + path);
-                MessageBox.Show(
+                Utils.AutoClosingMessageBox.Show(
                     languages["link.getLocalFileError.message"].ToString() + " (" + path + ")",
                     languages["link.getLocalFileError.caption"].ToString(),
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error
+                    MessageBoxImage.Error,
+                    Utils.AutoClosingMessageBox.maxDisplayTime
                 );
                 return;
             }
@@ -251,11 +253,11 @@ namespace File_Sync_App
             {
                 var languages = Utils.Language.getRDict();
                 Utils.Log.write("link.getLocalFileError: " + ex.Message);
-                MessageBox.Show(
+                Utils.AutoClosingMessageBox.Show(
                     languages["link.defaultError.message"].ToString(),
                     languages["link.getLocalFileError.caption"].ToString(),
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error
+                    MessageBoxImage.Error,
+                    Utils.AutoClosingMessageBox.maxDisplayTime
                 );
                 return;
             }
@@ -553,11 +555,11 @@ namespace File_Sync_App
             {
                 var languages = Utils.Language.getRDict();
 
-                MessageBox.Show(
+                Utils.AutoClosingMessageBox.Show(
                     languages["link.okError.message"].ToString(),
                     languages["link.okError.caption"].ToString(),
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error
+                    MessageBoxImage.Error,
+                    Utils.AutoClosingMessageBox.maxDisplayTime
                 );
                 return;
             }
@@ -569,11 +571,11 @@ namespace File_Sync_App
                     if (eLink.name.Equals(this.tbxLinkName.Text))
                     {
                         var languages = Utils.Language.getRDict();
-                        MessageBox.Show(
+                        Utils.AutoClosingMessageBox.Show(
                             languages["link.nameExistingError.message"].ToString(),
                             languages["link.nameExistingError.caption"].ToString(),
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Error
+                            MessageBoxImage.Error,
+                            Utils.AutoClosingMessageBox.maxDisplayTime
                         );
                         return;
                     }

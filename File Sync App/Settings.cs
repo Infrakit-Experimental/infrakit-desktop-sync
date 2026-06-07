@@ -15,6 +15,8 @@ namespace File_Sync_App
         /// </summary>
         internal static bool deleteFoldersAndFiles = false;
 
+        internal static bool handleInvalidFiles = false;
+
         #region default file sync
 
         /// <summary>
@@ -92,11 +94,11 @@ namespace File_Sync_App
         /// </summary>
         internal static void showLoadingError()
         {
-            MessageBox.Show(
+            Utils.AutoClosingMessageBox.Show(
                 LibraryUtils.getMessage("error.loading.message") + " -> " + Utils.Language.getMessage("settings.error.loading.message"),
                 LibraryUtils.getMessage("error.loading.caption"),
-                MessageBoxButton.OK,
-                MessageBoxImage.Error
+                MessageBoxImage.Error,
+                Utils.AutoClosingMessageBox.maxDisplayTime
             );
         }
     }

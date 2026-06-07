@@ -151,6 +151,62 @@ namespace File_Sync_App.InputWindows
 
             #endregion set default file sync
 
+            // Set the max error display time setting.
+            #region maxErrorDisplayTime
+
+            bool maxErrorDisplayTime = true;
+            try
+            {
+                maxErrorDisplayTime = bool.Parse(Utils.Settings.get("maxErrorDisplayTime"));
+            }
+            catch (Exception ex)
+            {
+                Log.write("settings.error.loading.maxErrorDisplayTime: " + ex.GetType() + " | " + ex.Message);
+
+                Utils.Settings.@override("maxErrorDisplayTime", "False");
+
+                errorOccurred = true;
+            }
+
+            int maxErrorDisplayTimeInMinutes = 15;
+
+            if (maxErrorDisplayTime)
+            {
+                try
+                {
+                    maxErrorDisplayTimeInMinutes = int.Parse(Utils.Settings.getAttribute("maxErrorDisplayTime", "duration"));
+                }
+                catch (Exception ex)
+                {
+                    Log.write("settings.error.loading.maxErrorDisplayTime.duration: " + ex.GetType() + " | " + ex.Message);
+
+                    Utils.Settings.@override("maxErrorDisplayTime", "False");
+                    maxErrorDisplayTime = false;
+
+                    errorOccurred = true;
+                }
+            }
+
+            if (!maxErrorDisplayTime)
+            {
+                this.slMaxErrorDisplayTime.IsEnabled = false;
+
+                this.cbMaxErrorDisplayTime.IsChecked = true;
+            }
+
+            this.slMaxErrorDisplayTime.Value = maxErrorDisplayTimeInMinutes;
+
+            #endregion maxErrorDisplayTime
+
+            #region invalid files
+
+            if(Settings.handleInvalidFiles)
+            {
+                this.cbInvalidChars.IsChecked = true;
+            }
+
+            #endregion invalid files
+
             // Set the value of the log storage duration setting.
             #region set log storage
 
@@ -409,6 +465,30 @@ namespace File_Sync_App.InputWindows
 
         #endregion delete sync logs
 
+        #region cbMaxErrorDisplayTime
+
+        /// <summary>
+        /// Handles the Checked event of the cbAutoDownloadDocs CheckBox.
+        /// </summary>
+        /// <param name="sender">The sender of the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void cbMaxErrorDisplayTime_Checked(object sender, RoutedEventArgs e)
+        {
+            this.slMaxErrorDisplayTime.IsEnabled = false;
+        }
+
+        /// <summary>
+        /// Handles the Unchecked event of the cbAutoDownloadDocs CheckBox.
+        /// </summary>
+        /// <param name="sender">The sender of the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void cbMaxErrorDisplayTime_Unchecked(object sender, RoutedEventArgs e)
+        {
+            this.slMaxErrorDisplayTime.IsEnabled = true;
+        }
+
+        #endregion cbMaxErrorDisplayTime
+
         #region cbDeleteFiles
 
         /// <summary>
@@ -490,6 +570,8 @@ namespace File_Sync_App.InputWindows
 
             Settings.setDefaultFileSyncByIdx(defaultFileSyncIdx);
 
+            Utils.Settings.set("defaultFileSync", defaultFileSyncIdx.ToString());
+
             #endregion select file by default
 
             #region logDeletion
@@ -519,6 +601,32 @@ namespace File_Sync_App.InputWindows
             }
 
             #endregion syncLogDeletion
+
+            #region maxErrorDisplayTime
+
+            var maxErrorDisplayTime = !this.cbMaxErrorDisplayTime.IsChecked;
+            var maxErrorDisplayTimeInMinutes = (int)this.slMaxErrorDisplayTime.Value;
+
+            Utils.Settings.set("maxErrorDisplayTime", maxErrorDisplayTime.ToString());
+
+            if (maxErrorDisplayTime.HasValue && maxErrorDisplayTime.Value)
+            {
+                Utils.Settings.setAttribute("maxErrorDisplayTime", "duration", maxErrorDisplayTimeInMinutes.ToString());
+                Utils.AutoClosingMessageBox.maxDisplayTime = new TimeSpan(0, maxErrorDisplayTimeInMinutes, 0);
+            }
+            else
+            {
+                Utils.AutoClosingMessageBox.maxDisplayTime = null;
+            }
+
+            #endregion maxErrorDisplayTime
+
+            #region invalid files
+
+            Settings.handleInvalidFiles = this.cbInvalidChars.IsChecked.Value;
+            Utils.Settings.set("handleInvalidFiles", this.cbInvalidChars.IsChecked.ToString());
+
+            #endregion invalid files
 
             #region language
 
