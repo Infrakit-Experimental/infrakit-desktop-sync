@@ -187,12 +187,8 @@ namespace File_Sync_App.InputWindows
                 }
             }
 
-            if (!maxErrorDisplayTime)
-            {
-                this.slMaxErrorDisplayTime.IsEnabled = false;
-
-                this.cbMaxErrorDisplayTime.IsChecked = true;
-            }
+            this.slMaxErrorDisplayTime.IsEnabled = maxErrorDisplayTime;
+            this.cbMaxErrorDisplayTime.IsChecked = maxErrorDisplayTime;
 
             this.slMaxErrorDisplayTime.Value = maxErrorDisplayTimeInMinutes;
 
@@ -474,7 +470,7 @@ namespace File_Sync_App.InputWindows
         /// <param name="e">The event arguments.</param>
         private void cbMaxErrorDisplayTime_Checked(object sender, RoutedEventArgs e)
         {
-            this.slMaxErrorDisplayTime.IsEnabled = false;
+            this.slMaxErrorDisplayTime.IsEnabled = true;
         }
 
         /// <summary>
@@ -484,7 +480,7 @@ namespace File_Sync_App.InputWindows
         /// <param name="e">The event arguments.</param>
         private void cbMaxErrorDisplayTime_Unchecked(object sender, RoutedEventArgs e)
         {
-            this.slMaxErrorDisplayTime.IsEnabled = true;
+            this.slMaxErrorDisplayTime.IsEnabled = false;
         }
 
         #endregion cbMaxErrorDisplayTime
@@ -604,7 +600,7 @@ namespace File_Sync_App.InputWindows
 
             #region maxErrorDisplayTime
 
-            var maxErrorDisplayTime = !this.cbMaxErrorDisplayTime.IsChecked;
+            var maxErrorDisplayTime = this.cbMaxErrorDisplayTime.IsChecked;
             var maxErrorDisplayTimeInMinutes = (int)this.slMaxErrorDisplayTime.Value;
 
             Utils.Settings.set("maxErrorDisplayTime", maxErrorDisplayTime.ToString());
